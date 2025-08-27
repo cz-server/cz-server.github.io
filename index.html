@@ -1,75 +1,73 @@
 <!DOCTYPE html>
-
-<html lang="en">
-
+<html lang="ro">
 <head>
-
   <meta charset="UTF-8">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>CustomZone</title>
-
   <style>
-
-    body {
-
-      margin: 0;
-
-      height: 100vh;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      background-color: #1e90ff; /* fundal albastru */
-
-      font-family: Arial, sans-serif;
-
-    }
-
-    h1 {
-
-      font-size: 5em;
-
-      font-weight: bold;
-
-      text-transform: uppercase;
-
-      background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet);
-
-      background-size: 1500% 1500%;
-
-      -webkit-background-clip: text;
-
-      -webkit-text-fill-color: transparent;
-
-      animation: rainbow 10s ease infinite;
-
-      text-align: center;
-
-    }
-
+    body { margin:0; padding:0; height:100vh; display:flex; flex-direction:column; background:#f8f8f8; font-family:sans-serif; }
+    h1 { margin:auto; font-size:4rem; animation: rainbow 5s infinite; text-align:center; }
     @keyframes rainbow {
-
-      0% {background-position: 0% 50%;}
-
-      50% {background-position: 100% 50%;}
-
-      100% {background-position: 0% 50%;}
-
+      0%{color:red;} 20%{color:orange;} 40%{color:yellow;}
+      60%{color:green;} 80%{color:blue;} 100%{color:purple;}
     }
-
+    footer { text-align:center; margin-bottom:20px; font-size:1rem; }
+    footer a { text-decoration:none; color:#333; }
+    .menu { position:absolute; top:20px; left:20px; cursor:pointer; width:30px; height:3px; background:#333; display:block; }
+    .menu:before, .menu:after { content:""; position:absolute; width:30px; height:3px; background:#333; }
+    .menu:before { top:-8px; }
+    .menu:after { top:8px; }
+    nav { display:none; position:absolute; top:50px; left:20px; background:#fff; border:1px solid #ccc; padding:10px; }
+    nav a { display:block; margin:5px 0; text-decoration:none; color:#333; }
+    #status, #countdown { text-align:center; margin:10px; }
   </style>
-
 </head>
-
 <body>
 
+  <div class="menu" onclick="toggleMenu()"></div>
+  <nav id="navMenu">
+    <a href="help.html">Help</a>
+    <a href="https://discord.gg/emajm8bgRN" target="_blank">Discord</a>
+    <a href="staff.html">Staff</a>
+  </nav>
+
   <h1>CustomZone</h1>
+  <div id="status">Se încarcă status server...</div>
+  <div id="countdown"></div>
 
+  <footer>
+    <a href="staff.html">Just a simple server made by @CZTeam</a>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const nav = document.getElementById('navMenu');
+      nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
+    }
+    // Minecraft status via API
+    fetch('https://api.mcsrvstat.us/3/138.201.48.55:19457')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('status').textContent =
+          data.online ? `Server ONLINE — ${data.players?.online || 0} jucători online` : 'Server OFFLINE';
+      });
+    // Countdown to event 05.09.2025 18:30 Moldova
+    const eventDate = new Date('2025-09-05T18:30:00+03:00');
+    function updateCountdown() {
+      const now = new Date();
+      let diff = eventDate - now;
+      if (diff < 0) { document.getElementById('countdown').textContent = 'Evenimentul a început!'; return; }
+      const days = Math.floor(diff/1000/60/60/24);
+      diff -= days*86400000;
+      const hrs = Math.floor(diff/1000/60/60);
+      diff -= hrs*3600000;
+      const mins = Math.floor(diff/1000/60);
+      diff -= mins*60000;
+      const secs = Math.floor(diff/1000);
+      document.getElementById('countdown').textContent =
+        `Evenimentul începe în: ${days} zile, ${hrs} ore, ${mins} min, ${secs} s`;
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
 </body>
-
-</html>
+  </html>
