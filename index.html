@@ -1,107 +1,119 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CustomZone</title>
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CustomZone</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
     body {
-      margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: url('https://i.imgur.com/vTx8TQO.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: white;
-      text-align: center;
+        margin: 0;
+        padding: 0;
+        background: url('https://i.imgur.com/0C0kFZb.png') no-repeat center center fixed;
+        background-size: cover;
+        font-family: 'Press Start 2P', cursive;
+        overflow-x: hidden;
+        color: white;
     }
 
     h1 {
-      font-size: 4em;
-      margin-top: 40px;
+        text-align: center;
+        margin-top: 50px;
+        font-size: 60px;
     }
 
-    .custom {
-      color: red;
+    .custom { color: red; }
+    .zone { color: white; }
+
+    .icon-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 100px;
+        flex-wrap: wrap;
+        gap: 50px;
     }
 
-    .zone {
-      color: white;
+    .icon {
+        width: 200px;
+        height: 200px;
+        background: rgba(0,0,0,0.6);
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.3s, background 0.3s;
+        text-decoration: none;
+        color: white;
+        font-size: 20px;
     }
 
-    .container {
-      display: flex;
-      justify-content: center;
-      margin-top: 80px;
-      gap: 40px;
-    }
-
-    .card {
-      width: 200px;
-      height: 200px;
-      background-color: rgba(0, 0, 0, 0.6);
-      border: 2px solid orange;
-      border-radius: 15px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .card:hover {
-      transform: scale(1.05);
-      background-color: rgba(255, 69, 0, 0.6);
-    }
-
-    .card img {
-      width: 60px;
-      margin-bottom: 10px;
+    .icon:hover {
+        transform: scale(1.1);
+        background: rgba(255,69,0,0.7);
     }
 
     .footer {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      padding: 20px;
-      background: linear-gradient(90deg, black, orange, red, purple, black);
-      color: white;
-      font-weight: bold;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background: linear-gradient(to right, black, orange);
+        text-align: center;
+        padding: 15px;
+        font-size: 16px;
     }
 
-    .footer a {
-      color: #00ffff;
-      text-decoration: none;
+    .falling-leaf {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background: url('https://i.imgur.com/0m9RhvN.png') no-repeat center center;
+        background-size: contain;
+        top: -50px;
+        animation: fall 10s linear infinite;
     }
 
-    .footer a:hover {
-      text-decoration: underline;
+    @keyframes fall {
+        0% { transform: translateY(0px) rotate(0deg); opacity:1; }
+        100% { transform: translateY(800px) rotate(360deg); opacity:0; }
     }
-  </style>
+
+</style>
 </head>
 <body>
+    <h1><span class="custom">Custom</span><span class="zone">Zone</span></h1>
 
-  <h1><span class="custom">Custom</span><span class="zone">Zone</span></h1>
-
-  <div class="container">
-    <div class="card" onclick="location.href='money.html'">
-      <img src="https://cdn-icons-png.flaticon.com/512/3208/3208722.png" alt="Money icon" />
-      <strong>Money</strong>
+    <div class="icon-container">
+        <a href="money.html" class="icon">
+            💰<br>Money
+        </a>
+        <a href="ranks.html" class="icon">
+            🏆<br>Ranks
+        </a>
+        <a href="rules.html" class="icon">
+            📜<br>Rules!
+        </a>
+        <a href="creators.html" class="icon">
+            👥<br>@CZTeam
+        </a>
     </div>
 
-    <div class="card" onclick="location.href='ranks.html'">
-      <img src="https://cdn-icons-png.flaticon.com/512/1998/1998611.png" alt="Ranks icon" />
-      <strong>Ranks</strong>
+    <div class="footer">
+        Just a simple server!<br>
+        made by: <a href="creators.html" style="color:yellow;text-decoration:underline;">@CZTeam</a>
     </div>
 
-    <div class="card" onclick="location.href='rules.html'">
-      <img src="https://cdn-icons-png.flaticon.com/512/1048/1048947.png" alt="Rules icon" />
-      <strong>Rules!</strong>
-    </div>
-  </div>
-
-  <div class="footer">
-    Just a simple server!<br/>
-    made by: <a href="team.html">@CZTeam</a>
-  </div>
+    <!-- Frunze animate -->
+    <script>
+        for (let i=0; i<30; i++) {
+            let leaf = document.createElement('div');
+            leaf.className = 'falling-leaf';
+            leaf.style.left = Math.random() * window.innerWidth + 'px';
+            leaf.style.animationDuration = (5 + Math.random()*10) + 's';
+            leaf.style.animationDelay = Math.random()*5 + 's';
+            document.body.appendChild(leaf);
+        }
+    </script>
 </body>
 </html>
