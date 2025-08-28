@@ -6,14 +6,25 @@
 <title>CustomZone</title>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
     body {
         margin: 0;
         padding: 0;
-        background: url('https://share.google/images/79qnu2xcjKuB0xD1X') no-repeat center center fixed;
-        background-size: cover;
+        background: linear-gradient(to bottom, #0d0d0d 0%, #1a1a1a 60%, #000000 100%);
         font-family: 'Press Start 2P', cursive;
         overflow-x: hidden;
         color: white;
+        position: relative;
+    }
+
+    /* Overlay cu dovleci și cranii */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-image: url('https://i.imgur.com/dYhQZqU.png'); /* pumpkin pattern transparent */
+        opacity: 0.07;
+        pointer-events: none;
     }
 
     h1 {
@@ -37,7 +48,7 @@
     .icon {
         width: 200px;
         height: 200px;
-        background: rgba(0,0,0,0.6);
+        background: rgba(0,0,0,0.7);
         border-radius: 20px;
         display: flex;
         flex-direction: column;
@@ -48,26 +59,41 @@
         text-decoration: none;
         color: white;
         font-size: 20px;
-        box-shadow: 0px 0px 15px rgba(255,140,0,0.8);
+        box-shadow: 0px 0px 15px rgba(255,140,0,0.9);
     }
 
     .icon:hover {
         transform: scale(1.1);
-        background: rgba(255,69,0,0.7);
+        background: rgba(255,69,0,0.85);
     }
 
+    /* Footer */
     .footer {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        background: linear-gradient(to right, black, orange);
+        margin-top: 100px;
         text-align: center;
-        padding: 15px;
-        font-size: 16px;
-        text-shadow: 1px 1px 5px black;
+        position: relative;
     }
 
-    /* Frunze create direct în CSS */
+    .footer-bar {
+        width: 100%;
+        height: 20px;
+        background: #000000;
+    }
+
+    .footer-text {
+        background: #1a1a1a;
+        color: #f5f5f5;
+        padding: 15px;
+        font-size: 14px;
+        text-shadow: 0px 0px 5px orange, 0px 0px 10px red;
+    }
+
+    .footer-text a {
+        color: yellow;
+        text-decoration: underline;
+    }
+
+    /* Frunze animate */
     .leaf {
         position: absolute;
         width: 20px;
@@ -99,17 +125,18 @@
         <a href="rules.html" class="icon">
             📜<br>Rules!
         </a>
-        <a href="creators.html" class="icon">
-            👥<br>@CZTeam
-        </a>
     </div>
 
+    <!-- Footer -->
     <div class="footer">
-        Just a simple server!<br>
-        made by: <a href="creators.html" style="color:yellow;text-decoration:underline;">@CZTeam</a>
+        <div class="footer-bar"></div>
+        <div class="footer-text">
+            Just a simple server! <br>
+            made by: <a href="creators.html">@CZTeam</a>
+        </div>
     </div>
 
-    <!-- Script pentru frunze -->
+    <!-- Script frunze -->
     <script>
         function createLeaf() {
             const leaf = document.createElement('div');
@@ -121,11 +148,9 @@
             leaf.style.animationDuration = (5 + Math.random() * 7) + 's';
             document.body.appendChild(leaf);
 
-            // elimină frunza după ce cade
             setTimeout(() => leaf.remove(), 12000);
         }
 
-        // generează frunze la fiecare 400ms
         setInterval(createLeaf, 400);
     </script>
 </body>
