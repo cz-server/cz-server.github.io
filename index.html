@@ -1,157 +1,316 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>CustomZone</title>
+
+<!-- Fonturi -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+  :root{
+    --accent-dark: #0b0b0b;
+    --footer-dark: #070707;
+    --footer-mid: #111111;
+    --gold-glow: 255,180,50;
+  }
+  html,body{height:100%;margin:0;padding:0;font-family: 'Roboto', sans-serif;background:#cfeff9;}
 
-    body {
-        margin: 0;
-        padding: 0;
-        background: linear-gradient(to bottom, #0d0d0d 0%, #1a1a1a 60%, #000000 100%);
-        font-family: 'Press Start 2P', cursive;
-        overflow-x: hidden;
-        color: white;
-        position: relative;
-    }
+/* FUNDAL "egeu" deschis + textura subtilă */
+  body{
+    /* Aegean-like gradient */
+    background: linear-gradient(180deg, #e6f9ff 0%, #c9eff7 30%, #9fd6e7 60%, #f8fbff 100%);
+    min-height:100vh;
+    color:#fff;
+    position:relative;
+    overflow-x:hidden;
+  }
 
-    /* Overlay cu dovleci și cranii */
-    body::before {
-        content: "";
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background-image: url('https://i.imgur.com/dYhQZqU.png'); /* pumpkin pattern transparent */
-        opacity: 0.07;
-        pointer-events: none;
-    }
+  /* subtile "spot" radial pentru adâncime */
+  body::after{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      radial-gradient(circle at 10% 10%, rgba(0,0,0,0.02) 0px, transparent 120px),
+      radial-gradient(circle at 90% 80%, rgba(0,0,0,0.02) 0px, transparent 180px);
+    pointer-events:none;
+    z-index:0;
+  }
 
-    h1 {
-        text-align: center;
-        margin-top: 50px;
-        font-size: 60px;
-        text-shadow: 2px 2px 10px black;
-    }
+  /* Header / logo */
+  header{position:relative; z-index:5; text-align:center; padding-top:28px; }
+  .logo{
+    font-family: 'Press Start 2P', cursive;
+    font-size:56px;
+    line-height:1;
+    display:inline-block;
+    padding:6px 12px;
+    background-clip:text;
+    -webkit-background-clip:text;
+    color:transparent;
+    /* gradient curcubeu orizontal */
+    background: linear-gradient(90deg,
+      #ff005d, #ff7a00, #ffd700, #44ff00, #00d4ff, #4b3bff, #ff2ee8);
+    background-size: 400% 100%;
+    animation: rainbowShift 6s linear infinite;
+    text-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  }
 
-    .custom { color: red; }
-    .zone { color: white; }
+  @keyframes rainbowShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 
-    .icon-container {
-        display: flex;
-        justify-content: center;
-        margin-top: 100px;
-        flex-wrap: wrap;
-        gap: 50px;
-    }
+  /* Icon grid (2 icon per row) */
+  .icons {
+    position:relative; z-index:5;
+    max-width:960px;
+    margin:50px auto;
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap:30px;
+    padding: 0 16px;
+    align-items:start;
+  }
 
-    .icon {
-        width: 200px;
-        height: 200px;
-        background: rgba(0,0,0,0.7);
-        border-radius: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: transform 0.3s, background 0.3s;
-        text-decoration: none;
-        color: white;
-        font-size: 20px;
-        box-shadow: 0px 0px 15px rgba(255,140,0,0.9);
-    }
+  /* single icon card */
+  .card{
+    background: linear-gradient(180deg, rgba(10,10,10,0.7), rgba(0,0,0,0.6));
+    border-radius:18px;
+    padding:24px;
+    min-height:200px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    color:#fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35), 0 0 0 4px rgba(255,140,0,0.03) inset;
+    transition: transform .25s ease, box-shadow .25s ease;
+    border: 1px solid rgba(255,255,255,0.02);
+  }
+  .card:hover{
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.45), 0 0 28px rgba(255,140,0,0.18);
+  }
 
-    .icon:hover {
-        transform: scale(1.1);
-        background: rgba(255,69,0,0.85);
-    }
+  .card-emoji{
+    font-size:44px;
+    margin-bottom:10px;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5));
+  }
 
-    /* Footer */
-    .footer {
-        margin-top: 100px;
-        text-align: center;
-        position: relative;
-    }
+  .card-title{
+    font-family:'Press Start 2P', cursive;
+    font-size:20px;
+    letter-spacing:1px;
+    color:#ffd;
+  }
 
-    .footer-bar {
-        width: 100%;
-        height: 20px;
-        background: #000000;
-    }
+  /* footer: big black band separated */
+  footer{
+    position:fixed;
+    left:0; right:0;
+    bottom:0;
+    z-index:9;
+  }
 
-    .footer-text {
-        background: #1a1a1a;
-        color: #f5f5f5;
-        padding: 15px;
-        font-size: 14px;
-        text-shadow: 0px 0px 5px orange, 0px 0px 10px red;
-    }
+  .footer-bar{
+    height:12px;
+    background: linear-gradient(90deg, rgba(0,0,0,1), rgba(20,20,20,1));
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.6);
+  }
 
-    .footer-text a {
-        color: yellow;
-        text-decoration: underline;
-    }
+  .footer-main{
+    background: linear-gradient(180deg, var(--footer-mid) 0%, var(--footer-dark) 100%);
+    color:#f3f3f3;
+    padding:18px 14px;
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    align-items:center;
+    font-weight:600;
+    text-align:center;
+    font-size:16px;
+    border-top: 4px solid rgba(255,140,0,0.06);
+  }
 
-    /* Frunze animate */
-    .leaf {
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background: orange;
-        border-radius: 50% 50% 50% 0;
-        transform: rotate(45deg);
-        top: -30px;
-        opacity: 0.9;
-        animation: fall linear forwards;
-    }
+  .footer-main .title {
+    font-size:18px;
+    color: #fff;
+    text-shadow: 0 2px 8px rgba(var(--gold-glow),0.12);
+  }
+  .footer-main .by {
+    color:#ffd27a;
+    opacity:0.95;
+    font-weight:700;
+    margin-left:8px;
+  }
+  .footer-main a{ color:#ffd27a; text-decoration:underline; }
 
-    @keyframes fall {
-        0%   { transform: translateY(0) rotate(0deg); }
-        100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-    }
+  /* responsive */
+  @media (max-width:740px){
+    .icons{ grid-template-columns: 1fr; gap:26px; }
+    .logo{ font-size:44px; }
+  }
+
+  /* Decorative leaves (SVG injected) z-index between background and content */
+  .leaves-layer{ position:fixed; inset:0; pointer-events:none; z-index:2; overflow:hidden; }
+  /* animation for leaves uses inline styles on elements */
 </style>
 </head>
 <body>
-    <h1><span class="custom">Custom</span><span class="zone">Zone</span></h1>
 
-    <div class="icon-container">
-        <a href="money.html" class="icon">
-            💰<br>Money
-        </a>
-        <a href="ranks.html" class="icon">
-            🏆<br>Ranks
-        </a>
-        <a href="rules.html" class="icon">
-            📜<br>Rules!
-        </a>
-    </div>
+<header>
+  <div class="logo">Custom<span style="color:transparent">Zone</span></div>
+</header>
 
-    <!-- Footer -->
-    <div class="footer">
-        <div class="footer-bar"></div>
-        <div class="footer-text">
-            Just a simple server! <br>
-            made by: <a href="creators.html">@CZTeam</a>
-        </div>
-    </div>
+<main style="position:relative; z-index:5;">
+  <section class="icons" aria-label="Main links">
+    <a class="card" href="money.html" title="Money">
+      <div class="card-emoji">💰 🪙 🧰</div>
+      <div class="card-title">Money</div>
+      <div style="font-size:12px; margin-top:8px; color: rgba(255,255,255,0.8)">1. Trăit - 100k MC<br>2. Mmm - 55k<br>3. Test - 33k</div>
+    </a>
 
-    <!-- Script frunze -->
-    <script>
-        function createLeaf() {
-            const leaf = document.createElement('div');
-            leaf.className = 'leaf';
-            leaf.style.left = Math.random() * window.innerWidth + 'px';
-            leaf.style.backgroundColor = ['#ff8c00','#ffa500','#ff4500','#ff6347'][Math.floor(Math.random()*4)];
-            leaf.style.width = (15 + Math.random()*15) + 'px';
-            leaf.style.height = leaf.style.width;
-            leaf.style.animationDuration = (5 + Math.random() * 7) + 's';
-            document.body.appendChild(leaf);
+    <a class="card" href="ranks.html" title="Ranks">
+      <div class="card-emoji">🏆 👑 ✨</div>
+      <div class="card-title">Ranks</div>
+      <div style="font-size:12px; margin-top:8px; color: rgba(255,255,255,0.8)">Fly, VIP, Meteorolog, Admin, Operator, Helper, Elite, Celestial</div>
+    </a>
 
-            setTimeout(() => leaf.remove(), 12000);
-        }
+    <a class="card" href="rules.html" title="Rules">
+      <div class="card-emoji">📜 ⚖️ ❗</div>
+      <div class="card-title">Rules!</div>
+      <div style="font-size:12px; margin-top:8px; color: rgba(255,255,255,0.8)">No griefing, No cheating, Respect staff, No spam</div>
+    </a>
 
-        setInterval(createLeaf, 400);
-    </script>
+    <a class="card" href="creators.html" title="@CZTeam">
+      <div class="card-emoji">👥 🛠️ 🌟</div>
+      <div class="card-title">@CZTeam</div>
+      <div style="font-size:12px; margin-top:8px; color: rgba(255,255,255,0.8)">Sn1p, BappyGamingOP, rolol1234, VolodyaXXL</div>
+    </a>
+  </section>
+</main>
+
+<!-- leaves layer (SVG nodes will be injected by JS) -->
+<div class="leaves-layer" id="leaves"></div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-bar"></div>
+  <div class="footer-main">
+    <div class="title">Just a simple server</div>
+    <div class="by">by <a href="creators.html">@CZTeam</a></div>
+  </div>
+</footer>
+
+<!-- Script: create falling SVG oak-like leaves (no external images) -->
+<script>
+  // helper that creates an SVG leaf with a path resembling an oak with "degete"
+  function makeLeafSVG(size, color) {
+    const svgns = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgns, "svg");
+    svg.setAttribute("width", size);
+    svg.setAttribute("height", size);
+    svg.setAttribute("viewBox", "0 0 60 60");
+    svg.style.display = "block";
+
+    // path: stylized oak-ish leaf
+    const path = document.createElementNS(svgns, "path");
+    path.setAttribute("d",
+      "M30 4 C36 8 42 6 46 10 C50 14 48 20 52 24 C56 28 50 32 48 36 C46 40 50 46 44 50 C38 54 32 50 28 48 C24 46 20 50 16 48 C12 46 8 42 10 38 C12 34 8 30 12 26 C16 22 20 22 26 18 C28 16 30 12 30 4 Z");
+    path.setAttribute("fill", color);
+    path.setAttribute("stroke", "rgba(0,0,0,0.08)");
+    path.setAttribute("stroke-width", "0.8");
+    svg.appendChild(path);
+    return svg;
+  }
+
+  // create and animate leaves
+  const leavesLayer = document.getElementById('leaves');
+
+  function spawnLeaf() {
+    const size = 18 + Math.random() * 36; // px
+    const colorOptions = ['#ff8c00','#ffa500','#ff6b00','#ff4d00','#ffb347'];
+    const color = colorOptions[Math.floor(Math.random()*colorOptions.length)];
+
+    const wrapper = document.createElement('div');
+    wrapper.style.position = 'absolute';
+    wrapper.style.left = Math.random() * 100 + 'vw';
+    wrapper.style.top = '-10vh';
+    wrapper.style.width = size + 'px';
+    wrapper.style.height = size + 'px';
+    wrapper.style.pointerEvents = 'none';
+    wrapper.style.zIndex = 3;
+
+    // add svg leaf
+    const svg = makeLeafSVG(size, color);
+    wrapper.appendChild(svg);
+
+    // random animation values
+    const duration = 6 + Math.random() * 6; // seconds
+    const sway = (Math.random() * 40) - 20; // px sway
+    const endLeft = (parseFloat(wrapper.style.left) / 1) + (Math.random()*20 - 10);
+
+    // initial transform
+    wrapper.style.transform = `translate3d(0,0,0) rotate(${Math.random()*360}deg)`;
+    wrapper.style.opacity = 0.95;
+
+    // use CSS transition to approximate falling + sway + rotation
+    wrapper.style.transition = `transform ${duration}s linear, opacity ${duration}s linear`;
+    leavesLayer.appendChild(wrapper);
+
+    // force reflow then set final transform
+    requestAnimationFrame(() => {
+      const finalY = window.innerHeight + 80;
+      const finalX = (Math.random()*20 - 10); // tiny horizontal drift
+      // combine translate and rotate
+      wrapper.style.transform = `translate3d(${finalX + sway}px, ${finalY}px, 0) rotate(${Math.random()*720}deg)`;
+      wrapper.style.opacity = 0.02;
+    });
+
+    // cleanup after animation
+    setTimeout(()=> {
+      wrapper.remove();
+    }, (duration+0.4)*1000);
+  }
+
+  // spawn bursts with variable frequency
+  setInterval(()=> {
+    // sometimes spawn 1, sometimes 2-3 quickly for natural effect
+    const r = Math.random();
+    if(r < 0.6) spawnLeaf();
+    else {
+      spawnLeaf();
+      setTimeout(spawnLeaf, 180);
+      if(Math.random() > 0.6) setTimeout(spawnLeaf, 360);
+    }
+  }, 450);
+
+  // ensure leaves don't spawn off-screen after resize
+  window.addEventListener('resize', ()=>{/* no-op for now */});
+
+  // enhance logo: make "Zone" white (we used transparent earlier) — overlay white span
+  (function fixLogoText(){
+    const logo = document.querySelector('.logo');
+    // create a white "Zone" after the gradient "Custom"
+    if(logo){
+      const zone = document.createElement('span');
+      zone.textContent = 'Zone';
+      zone.style.background = 'none';
+      zone.style.color = '#ffffff';
+      zone.style.marginLeft = '6px';
+      zone.style.textShadow = '0 2px 6px rgba(0,0,0,0.35)';
+      zone.style.webkitTextFillColor = 'white';
+      zone.style.fontFamily = "'Press Start 2P', cursive";
+      zone.style.fontSize = '56px';
+      logo.appendChild(zone);
+    }
+  })();
+</script>
+
 </body>
 </html>
