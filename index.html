@@ -67,22 +67,22 @@
         text-shadow: 1px 1px 5px black;
     }
 
-    /* Frunze portocalii de stejar */
+    /* Frunze create direct în CSS */
     .leaf {
         position: absolute;
-        width: 40px;
-        height: 40px;
-        background-image: url('https://i.imgur.com/pJWhYwQ.png'); /* frunză portocalie de stejar */
-        background-size: contain;
-        background-repeat: no-repeat;
-        top: -50px;
-        pointer-events: none;
-        animation: fall linear infinite;
+        width: 20px;
+        height: 20px;
+        background: orange;
+        border-radius: 50% 50% 50% 0;
+        transform: rotate(45deg);
+        top: -30px;
+        opacity: 0.9;
+        animation: fall linear forwards;
     }
 
     @keyframes fall {
-        0% { transform: translateY(0px) rotate(0deg); opacity:1; }
-        100% { transform: translateY(110vh) rotate(360deg); opacity:0; }
+        0%   { transform: translateY(0) rotate(0deg); }
+        100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
     }
 </style>
 </head>
@@ -115,18 +115,18 @@
             const leaf = document.createElement('div');
             leaf.className = 'leaf';
             leaf.style.left = Math.random() * window.innerWidth + 'px';
-            leaf.style.animationDuration = (6 + Math.random() * 6) + 's';
-            leaf.style.opacity = Math.random();
+            leaf.style.backgroundColor = ['#ff8c00','#ffa500','#ff4500','#ff6347'][Math.floor(Math.random()*4)];
+            leaf.style.width = (15 + Math.random()*15) + 'px';
+            leaf.style.height = leaf.style.width;
+            leaf.style.animationDuration = (5 + Math.random() * 7) + 's';
             document.body.appendChild(leaf);
 
             // elimină frunza după ce cade
-            setTimeout(() => {
-                leaf.remove();
-            }, 12000);
+            setTimeout(() => leaf.remove(), 12000);
         }
 
-        // generează frunze la fiecare 500ms
-        setInterval(createLeaf, 500);
+        // generează frunze la fiecare 400ms
+        setInterval(createLeaf, 400);
     </script>
 </body>
 </html>
