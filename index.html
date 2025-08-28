@@ -6,310 +6,159 @@
 <title>CustomZone</title>
 
 <!-- Fonturi -->
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
 <style>
   :root{
-    --accent-dark: #0b0b0b;
-    --footer-dark: #070707;
-    --footer-mid: #111111;
-    --gold-glow: 255,180,50;
+    --footer-dark: #0a0a0a;
+    --footer-mid: #151515;
   }
-  html,body{height:100%;margin:0;padding:0;font-family: 'Roboto', sans-serif;background:#cfeff9;}
+  html,body{height:100%;margin:0;padding:0;font-family: 'Press Start 2P', cursive;background:#111;color:#fff;}
 
-/* FUNDAL "egeu" deschis + textura subtilă */
+  /* Fundal negru-deschis cu gradient subtil */
   body{
-    /* Aegean-like gradient */
-    background: linear-gradient(180deg, #e6f9ff 0%, #c9eff7 30%, #9fd6e7 60%, #f8fbff 100%);
+    background: linear-gradient(180deg, #111 0%, #1a1a1a 40%, #0d0d0d 100%);
     min-height:100vh;
-    color:#fff;
     position:relative;
-    overflow-x:hidden;
   }
 
-  /* subtile "spot" radial pentru adâncime */
-  body::after{
-    content:"";
-    position:fixed; inset:0;
-    background-image:
-      radial-gradient(circle at 10% 10%, rgba(0,0,0,0.02) 0px, transparent 120px),
-      radial-gradient(circle at 90% 80%, rgba(0,0,0,0.02) 0px, transparent 180px);
-    pointer-events:none;
-    z-index:0;
-  }
-
-  /* Header / logo */
-  header{position:relative; z-index:5; text-align:center; padding-top:28px; }
+  header{text-align:center;padding:30px 10px;}
   .logo{
-    font-family: 'Press Start 2P', cursive;
-    font-size:56px;
-    line-height:1;
+    font-size:50px;
+    font-weight:700;
     display:inline-block;
-    padding:6px 12px;
-    background-clip:text;
-    -webkit-background-clip:text;
-    color:transparent;
-    /* gradient curcubeu orizontal */
     background: linear-gradient(90deg,
       #ff005d, #ff7a00, #ffd700, #44ff00, #00d4ff, #4b3bff, #ff2ee8);
     background-size: 400% 100%;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
     animation: rainbowShift 6s linear infinite;
-    text-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    text-shadow: 0 0 20px rgba(255,255,255,0.15);
   }
-
   @keyframes rainbowShift {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
   }
 
-  /* Icon grid (2 icon per row) */
+  /* Server status box */
+  .status{
+    text-align:center;
+    font-size:20px;
+    margin:20px auto 40px auto;
+    padding:20px 30px;
+    background:#1c1c1c;
+    border:1px solid #333;
+    border-radius:16px;
+    width:max-content;
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
+  }
+  .status.online{color:#00ff6a;}
+  .status.offline{color:#ff3b3b;}
+
+  /* Icons grid */
   .icons {
-    position:relative; z-index:5;
-    max-width:960px;
-    margin:50px auto;
+    max-width:900px;
+    margin:0 auto 60px auto;
     display:grid;
     grid-template-columns: repeat(2, 1fr);
     gap:30px;
-    padding: 0 16px;
-    align-items:start;
+    padding:0 16px;
   }
-
-  /* single icon card */
   .card{
-    background: linear-gradient(180deg, rgba(10,10,10,0.7), rgba(0,0,0,0.6));
+    background: linear-gradient(180deg, rgba(20,20,20,0.85), rgba(10,10,10,0.8));
     border-radius:18px;
-    padding:24px;
-    min-height:200px;
+    padding:40px 20px;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    text-decoration:none;
     color:#fff;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.35), 0 0 0 4px rgba(255,140,0,0.03) inset;
-    transition: transform .25s ease, box-shadow .25s ease;
-    border: 1px solid rgba(255,255,255,0.02);
+    text-decoration:none;
+    font-size:20px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.4);
+    transition:transform .25s ease, box-shadow .25s ease;
   }
   .card:hover{
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 18px 40px rgba(0,0,0,0.45), 0 0 28px rgba(255,140,0,0.18);
+    transform:translateY(-6px) scale(1.02);
+    box-shadow:0 18px 40px rgba(0,0,0,0.6);
   }
+  .card-emoji{font-size:48px;margin-bottom:12px;}
 
-  .card-emoji{
-    font-size:44px;
-    margin-bottom:10px;
-    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5));
-  }
-
-  .card-title{
-    font-family:'Press Start 2P', cursive;
-    font-size:20px;
-    letter-spacing:1px;
-    color:#ffd;
-  }
-
-  /* footer: big black band separated */
+  /* Footer */
   footer{
     position:fixed;
-    left:0; right:0;
-    bottom:0;
-    z-index:9;
-  }
-
-  .footer-bar{
-    height:12px;
-    background: linear-gradient(90deg, rgba(0,0,0,1), rgba(20,20,20,1));
-    box-shadow: 0 -4px 12px rgba(0,0,0,0.6);
-  }
-
-  .footer-main{
-    background: linear-gradient(180deg, var(--footer-mid) 0%, var(--footer-dark) 100%);
-    color:#f3f3f3;
-    padding:18px 14px;
-    display:flex;
-    justify-content:center;
-    gap:12px;
-    align-items:center;
-    font-weight:600;
+    left:0; right:0; bottom:0;
+    background:linear-gradient(180deg,var(--footer-mid),var(--footer-dark));
     text-align:center;
+    padding:18px;
     font-size:16px;
-    border-top: 4px solid rgba(255,140,0,0.06);
+    color:#eee;
+    border-top:3px solid #000;
   }
 
-  .footer-main .title {
-    font-size:18px;
-    color: #fff;
-    text-shadow: 0 2px 8px rgba(var(--gold-glow),0.12);
+  @media(max-width:740px){
+    .icons{grid-template-columns:1fr;}
+    .logo{font-size:38px;}
   }
-  .footer-main .by {
-    color:#ffd27a;
-    opacity:0.95;
-    font-weight:700;
-    margin-left:8px;
-  }
-  .footer-main a{ color:#ffd27a; text-decoration:underline; }
-
-  /* responsive */
-  @media (max-width:740px){
-    .icons{ grid-template-columns: 1fr; gap:26px; }
-    .logo{ font-size:44px; }
-  }
-
-  /* Decorative leaves (SVG injected) z-index between background and content */
-  .leaves-layer{ position:fixed; inset:0; pointer-events:none; z-index:2; overflow:hidden; }
-  /* animation for leaves uses inline styles on elements */
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">Custom<span style="color:transparent">Zone</span></div>
+  <div class="logo">CustomZone</div>
 </header>
 
-<main style="position:relative; z-index:5;">
-  <section class="icons" aria-label="Main links">
-    <a class="card" href="money.html" title="Money">
-      <div class="card-emoji">💰 🪙 🧰</div>
-      <div class="card-title">Money</div>
-      <div style="font-size:12px; margin-top:8px; color: rgba(255,255,255,0.8)">1. Trăit - 100k MC<br>2. Mmm - 55k<br>3. Test - 33k</div>
-    </a>
+<!-- Server status -->
+<div id="serverStatus" class="status">Checking server status...</div>
 
-    <a class="card" href="ranks.html" title="Ranks">
-      <div class="card-emoji">🏆 👑 ✨</div>
-      <div class="card-title">Ranks</div>
-      <div style="font-size:12px; margin-top:8px; color: rgba(255,255,255,0.8)">Fly, VIP, Meteorolog, Admin, Operator, Helper, Elite, Celestial</div>
+<main>
+  <section class="icons">
+    <a class="card" href="money.html">
+      <div class="card-emoji">💰</div>
+      Money
     </a>
-
-    <a class="card" href="rules.html" title="Rules">
-      <div class="card-emoji">📜 ⚖️ ❗</div>
-      <div class="card-title">Rules!</div>
-      <div style="font-size:12px; margin-top:8px; color: rgba(255,255,255,0.8)">No griefing, No cheating, Respect staff, No spam</div>
+    <a class="card" href="ranks.html">
+      <div class="card-emoji">🏆</div>
+      Ranks
     </a>
-
-    <a class="card" href="creators.html" title="@CZTeam">
-      <div class="card-emoji">👥 🛠️ 🌟</div>
-      <div class="card-title">@CZTeam</div>
-      <div style="font-size:12px; margin-top:8px; color: rgba(255,255,255,0.8)">Sn1p, BappyGamingOP, rolol1234, VolodyaXXL</div>
+    <a class="card" href="rules.html">
+      <div class="card-emoji">📜</div>
+      Rules
+    </a>
+    <a class="card" href="creators.html">
+      <div class="card-emoji">👥</div>
+      Creators
     </a>
   </section>
 </main>
 
-<!-- leaves layer (SVG nodes will be injected by JS) -->
-<div class="leaves-layer" id="leaves"></div>
-
-<!-- Footer -->
 <footer>
-  <div class="footer-bar"></div>
-  <div class="footer-main">
-    <div class="title">Just a simple server</div>
-    <div class="by">by <a href="creators.html">@CZTeam</a></div>
-  </div>
+  Just a simple server
 </footer>
 
-<!-- Script: create falling SVG oak-like leaves (no external images) -->
 <script>
-  // helper that creates an SVG leaf with a path resembling an oak with "degete"
-  function makeLeafSVG(size, color) {
-    const svgns = "http://www.w3.org/2000/svg";
-    const svg = document.createElementNS(svgns, "svg");
-    svg.setAttribute("width", size);
-    svg.setAttribute("height", size);
-    svg.setAttribute("viewBox", "0 0 60 60");
-    svg.style.display = "block";
-
-    // path: stylized oak-ish leaf
-    const path = document.createElementNS(svgns, "path");
-    path.setAttribute("d",
-      "M30 4 C36 8 42 6 46 10 C50 14 48 20 52 24 C56 28 50 32 48 36 C46 40 50 46 44 50 C38 54 32 50 28 48 C24 46 20 50 16 48 C12 46 8 42 10 38 C12 34 8 30 12 26 C16 22 20 22 26 18 C28 16 30 12 30 4 Z");
-    path.setAttribute("fill", color);
-    path.setAttribute("stroke", "rgba(0,0,0,0.08)");
-    path.setAttribute("stroke-width", "0.8");
-    svg.appendChild(path);
-    return svg;
-  }
-
-  // create and animate leaves
-  const leavesLayer = document.getElementById('leaves');
-
-  function spawnLeaf() {
-    const size = 18 + Math.random() * 36; // px
-    const colorOptions = ['#ff8c00','#ffa500','#ff6b00','#ff4d00','#ffb347'];
-    const color = colorOptions[Math.floor(Math.random()*colorOptions.length)];
-
-    const wrapper = document.createElement('div');
-    wrapper.style.position = 'absolute';
-    wrapper.style.left = Math.random() * 100 + 'vw';
-    wrapper.style.top = '-10vh';
-    wrapper.style.width = size + 'px';
-    wrapper.style.height = size + 'px';
-    wrapper.style.pointerEvents = 'none';
-    wrapper.style.zIndex = 3;
-
-    // add svg leaf
-    const svg = makeLeafSVG(size, color);
-    wrapper.appendChild(svg);
-
-    // random animation values
-    const duration = 6 + Math.random() * 6; // seconds
-    const sway = (Math.random() * 40) - 20; // px sway
-    const endLeft = (parseFloat(wrapper.style.left) / 1) + (Math.random()*20 - 10);
-
-    // initial transform
-    wrapper.style.transform = `translate3d(0,0,0) rotate(${Math.random()*360}deg)`;
-    wrapper.style.opacity = 0.95;
-
-    // use CSS transition to approximate falling + sway + rotation
-    wrapper.style.transition = `transform ${duration}s linear, opacity ${duration}s linear`;
-    leavesLayer.appendChild(wrapper);
-
-    // force reflow then set final transform
-    requestAnimationFrame(() => {
-      const finalY = window.innerHeight + 80;
-      const finalX = (Math.random()*20 - 10); // tiny horizontal drift
-      // combine translate and rotate
-      wrapper.style.transform = `translate3d(${finalX + sway}px, ${finalY}px, 0) rotate(${Math.random()*720}deg)`;
-      wrapper.style.opacity = 0.02;
-    });
-
-    // cleanup after animation
-    setTimeout(()=> {
-      wrapper.remove();
-    }, (duration+0.4)*1000);
-  }
-
-  // spawn bursts with variable frequency
-  setInterval(()=> {
-    // sometimes spawn 1, sometimes 2-3 quickly for natural effect
-    const r = Math.random();
-    if(r < 0.6) spawnLeaf();
-    else {
-      spawnLeaf();
-      setTimeout(spawnLeaf, 180);
-      if(Math.random() > 0.6) setTimeout(spawnLeaf, 360);
+  async function fetchServerStatus(){
+    const statusBox = document.getElementById('serverStatus');
+    try{
+      const res = await fetch("https://api.mcsrvstat.us/2/138.201.48.55:19457");
+      const data = await res.json();
+      if(data && data.online){
+        statusBox.textContent = `🟢 Online | Players: ${data.players.online}/${data.players.max}`;
+        statusBox.classList.add('online');
+        statusBox.classList.remove('offline');
+      } else {
+        statusBox.textContent = "🔴 Offline";
+        statusBox.classList.add('offline');
+        statusBox.classList.remove('online');
+      }
+    }catch(e){
+      statusBox.textContent = "🔴 Offline";
+      statusBox.classList.add('offline');
     }
-  }, 450);
-
-  // ensure leaves don't spawn off-screen after resize
-  window.addEventListener('resize', ()=>{/* no-op for now */});
-
-  // enhance logo: make "Zone" white (we used transparent earlier) — overlay white span
-  (function fixLogoText(){
-    const logo = document.querySelector('.logo');
-    // create a white "Zone" after the gradient "Custom"
-    if(logo){
-      const zone = document.createElement('span');
-      zone.textContent = 'Zone';
-      zone.style.background = 'none';
-      zone.style.color = '#ffffff';
-      zone.style.marginLeft = '6px';
-      zone.style.textShadow = '0 2px 6px rgba(0,0,0,0.35)';
-      zone.style.webkitTextFillColor = 'white';
-      zone.style.fontFamily = "'Press Start 2P', cursive";
-      zone.style.fontSize = '56px';
-      logo.appendChild(zone);
-    }
-  })();
+  }
+  fetchServerStatus();
+  setInterval(fetchServerStatus, 30000); // update la 30s
 </script>
 
 </body>
