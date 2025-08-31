@@ -1,165 +1,241 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>CustomZone</title>
-
-<!-- Fonturi -->
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --footer-dark: #0a0a0a;
-    --footer-mid: #151515;
+    --bg-dark: #000000;
+    --card-bg: rgba(22,22,22,0.95);
+    --accent: #ff8c00;
   }
-  html,body{height:100%;margin:0;padding:0;font-family: 'Press Start 2P', cursive;background:#111;color:#fff;}
+  html,body{height:100%;margin:0;background:var(--bg-dark);color:#fff;font-family:Roboto, sans-serif;}
 
-  /* Fundal negru-deschis cu gradient subtil */
-  body{
-    background: linear-gradient(180deg, #111 0%, #1a1a1a 40%, #0d0d0d 100%);
-    min-height:100vh;
-    position:relative;
+/* layout */
+  header{position:relative;z-index:6;padding:28px 16px 8px 16px;display:flex;align-items:center;gap:12px;}
+  /* hamburger */
+  .hamburger{
+    width:44px;height:44px;border-radius:10px;background:linear-gradient(180deg,#111,#0b0b0b);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid rgba(255,255,255,0.03);
+    box-shadow:0 6px 18px rgba(0,0,0,0.6);
   }
+  .hamburger .bar{width:20px;height:2px;background:#fff;margin:3px 0;border-radius:2px;opacity:.9}
 
-  header{text-align:center;padding:30px 10px;}
+  /* slide menu */
+  .sideMenu{position:fixed;left:12px;top:70px;background:linear-gradient(180deg,#071017, #0b0b0b);
+    padding:10px;border-radius:12px;display:none;flex-direction:column;gap:8px;z-index:20;box-shadow:0 8px 30px rgba(0,0,0,0.6);}
+  .sideMenu a{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;text-decoration:none;color:#fff;background:transparent;font-weight:600;}
+  .sideMenu a:hover{background:rgba(255,255,255,0.03)}
+
+  /* logo rainbow text */
   .logo{
-    font-size:50px;
-    font-weight:700;
-    display:inline-block;
-    background: linear-gradient(90deg,
-      #ff005d, #ff7a00, #ffd700, #44ff00, #00d4ff, #4b3bff, #ff2ee8);
-    background-size: 400% 100%;
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    animation: rainbowShift 6s linear infinite;
-    text-shadow: 0 0 20px rgba(255,255,255,0.15);
+    margin:0 auto; font-family: 'Press Start 2P', cursive; font-size:46px;
+    background: linear-gradient(90deg,#ff005d,#ff7a00,#ffd700,#44ff00,#00d4ff,#4b3bff,#ff2ee8);
+    background-size:400% 100%;
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    animation: rainbowShift 6s linear infinite; text-align:center;
+    text-shadow: 0 6px 18px rgba(0,0,0,0.6);
   }
-  @keyframes rainbowShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
+  @keyframes rainbowShift { 0%{background-position:0%} 50%{background-position:100%} 100%{background-position:0%} }
 
-  /* Server status box */
-  .status{
-    text-align:center;
-    font-size:20px;
-    margin:20px auto 40px auto;
-    padding:20px 30px;
-    background:#1c1c1c;
-    border:1px solid #333;
-    border-radius:16px;
-    width:max-content;
-    box-shadow:0 0 20px rgba(0,0,0,0.5);
-  }
-  .status.online{color:#00ff6a;}
-  .status.offline{color:#ff3b3b;}
+  /* central status box */
+  .status-box{max-width:920px;margin:20px auto;padding:18px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 10px 30px rgba(0,0,0,0.7);border:1px solid rgba(255,255,255,0.02)}
+  .server-info{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+  .server-ip{background:var(--card-bg);padding:10px 14px;border-radius:10px;font-weight:700;border:1px solid rgba(255,255,255,0.03)}
+  .copy-btn{background:#222;border:0;padding:8px 10px;border-radius:8px;cursor:pointer;color:#ffd27a;font-weight:700}
+  .status-online{color:#7CFF9A;font-weight:700}
+  .status-offline{color:#FF7C7C;font-weight:700}
 
-  /* Icons grid */
-  .icons {
-    max-width:900px;
-    margin:0 auto 60px auto;
-    display:grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap:30px;
-    padding:0 16px;
-  }
-  .card{
-    background: linear-gradient(180deg, rgba(20,20,20,0.85), rgba(10,10,10,0.8));
-    border-radius:18px;
-    padding:40px 20px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    color:#fff;
-    text-decoration:none;
-    font-size:20px;
-    box-shadow:0 8px 24px rgba(0,0,0,0.4);
-    transition:transform .25s ease, box-shadow .25s ease;
-  }
-  .card:hover{
-    transform:translateY(-6px) scale(1.02);
-    box-shadow:0 18px 40px rgba(0,0,0,0.6);
-  }
-  .card-emoji{font-size:48px;margin-bottom:12px;}
+  /* icon cards grid (2 per row) */
+  .cards{max-width:980px;margin:36px auto;display:grid;grid-template-columns:repeat(2,1fr);gap:28px;padding:0 16px;z-index:5;position:relative}
+  .card{background:var(--card-bg);border-radius:14px;padding:34px;display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;color:#fff;border:1px solid rgba(255,255,255,0.02);box-shadow:0 12px 30px rgba(0,0,0,0.6);transition:transform .25s ease}
+  .card:hover{transform:translateY(-8px)}
+  .card-emoji{font-size:44px}
+  .card-title{font-family:'Press Start 2P';font-size:18px;margin-top:6px}
 
-  /* Footer */
-  footer{
-    position:fixed;
-    left:0; right:0; bottom:0;
-    background:linear-gradient(180deg,var(--footer-mid),var(--footer-dark));
-    text-align:center;
-    padding:18px;
-    font-size:16px;
-    color:#eee;
-    border-top:3px solid #000;
-  }
+  /* footer band */
+  footer{position:fixed;left:0;right:0;bottom:0;background:#000;padding:12px 8px;text-align:center;font-weight:700;border-top:2px solid rgba(255,140,0,0.05);z-index:10}
+  footer small{display:block;color:#bfbfbf;font-weight:400;margin-top:6px}
 
-  @media(max-width:740px){
-    .icons{grid-template-columns:1fr;}
-    .logo{font-size:38px;}
-  }
+  /* leaves layer */
+  .leaves{position:fixed;inset:0;pointer-events:none;z-index:3;overflow:hidden}
+
+  /* first-visit animations */
+  .animate .logo{animation:rainbowShift 5s linear infinite, fadeInUp .9s cubic-bezier(.2,.9,.2,1)}
+  .animate .cards .card{animation:cardIn .8s cubic-bezier(.2,.9,.2,1) both}
+  .animate .status-box{animation:fadeInUp .9s .1s both}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  @keyframes cardIn{0%{opacity:0;transform:translateY(26px) scale(.98)}100%{opacity:1;transform:none}}
+
+  /* responsive */
+  @media(max-width:800px){.cards{grid-template-columns:1fr}.logo{font-size:38px}}
 </style>
 </head>
 <body>
+  <header>
+    <div class="hamburger" id="hamburger" title="Meniu">
+      <div style="display:flex;flex-direction:column;align-items:center">
+        <div class="bar" style="width:18px"></div>
+        <div class="bar" style="width:14px"></div>
+        <div class="bar" style="width:10px"></div>
+      </div>
+    </div>
 
-<header>
-  <div class="logo">CustomZone</div>
-</header>
+    <div class="logo" id="logo">CustomZone</div>
+  </header>
 
-<!-- Server status -->
-<div id="serverStatus" class="status">Checking server status...</div>
+  <!-- side menu -->
+  <div class="sideMenu" id="sideMenu">
+    <a href="https://discord.gg/emajm8bgRN" target="_blank">💬 Discord</a>
+    <a href="https://www.youtube.com/@sn1perxyt" target="_blank">▶️ YouTube</a>
+  </div>
 
-<main>
-  <section class="icons">
-    <a class="card" href="money.html">
-      <div class="card-emoji">💰</div>
-      Money
-    </a>
-    <a class="card" href="ranks.html">
-      <div class="card-emoji">🏆</div>
-      Ranks
-    </a>
-    <a class="card" href="rules.html">
-      <div class="card-emoji">📜</div>
-      Rules
-    </a>
-    <a class="card" href="creators.html">
-      <div class="card-emoji">👥</div>
-      Creators
-    </a>
-  </section>
-</main>
+  <!-- server status -->
+  <div class="status-box" id="statusBox" aria-live="polite">
+    <div style="font-size:13px;color:#cfcfcf">Server</div>
+    <div class="server-info">
+      <div id="statusText" class="status-offline">Checking...</div>
+      <div class="server-ip">138.201.48.55:19457</div>
+      <div class="server-ip" title="Click to copy czs.zapto.org:19457" id="copyTarget">czs.zapto.org:19457</div>
+      <button class="copy-btn" id="copyBtn">Copy IP</button>
+    </div>
+  </div>
 
-<footer>
-  Just a simple server
-</footer>
+  <!-- main cards -->
+  <main>
+    <section class="cards" id="cards">
+      <a class="card" href="rules.html">
+        <div class="card-emoji">📜</div>
+        <div class="card-title">Rules</div>
+      </a>
+
+      <a class="card" href="events.html">
+        <div class="card-emoji">🎃</div>
+        <div class="card-title">Events</div>
+      </a>
+
+      <a class="card" href="ranks.html">
+        <div class="card-emoji">🏷️</div>
+        <div class="card-title">Ranks</div>
+      </a>
+
+      <a class="card" href="money.html">
+        <div class="card-emoji">💰</div>
+        <div class="card-title">Money</div>
+      </a>
+    </section>
+  </main>
+
+  <!-- leaves layer (SVG leaves injected by JS) -->
+  <div class="leaves" id="leaves"></div>
+
+  <footer>
+    Just a simple server
+    <small>(IP: 138.201.48.55:19457)</small>
+  </footer>
 
 <script>
-  async function fetchServerStatus(){
-    const statusBox = document.getElementById('serverStatus');
+  // SIDE MENU toggle
+  const hamburger = document.getElementById('hamburger');
+  const sideMenu = document.getElementById('sideMenu');
+  hamburger.addEventListener('click', ()=> {
+    sideMenu.style.display = sideMenu.style.display === 'flex' ? 'none' : 'flex';
+  });
+
+  // COPY IP
+  const copyBtn = document.getElementById('copyBtn');
+  const copyTarget = document.getElementById('copyTarget').textContent;
+  copyBtn.addEventListener('click', async () => {
     try{
-      const res = await fetch("https://api.mcsrvstat.us/2/138.201.48.55:19457");
+      await navigator.clipboard.writeText(copyTarget);
+      copyBtn.textContent = 'Copied!';
+      setTimeout(()=> copyBtn.textContent = 'Copy IP', 1400);
+    }catch(e){
+      copyBtn.textContent = 'Copy failed';
+      setTimeout(()=> copyBtn.textContent = 'Copy IP', 1400);
+    }
+  });
+
+  // SERVER STATUS (mcsrvstat API)
+  async function updateStatus(){
+    const statusText = document.getElementById('statusText');
+    try{
+      const res = await fetch('https://api.mcsrvstat.us/2/138.201.48.55:19457');
       const data = await res.json();
       if(data && data.online){
-        statusBox.textContent = `🟢 Online | Players: ${data.players.online}/${data.players.max}`;
-        statusBox.classList.add('online');
-        statusBox.classList.remove('offline');
+        statusText.textContent = `🟢 Online | Players: ${data.players?.online ?? 0}/${data.players?.max ?? '?'}`;
+        statusText.className = 'status-online';
       } else {
-        statusBox.textContent = "🔴 Offline";
-        statusBox.classList.add('offline');
-        statusBox.classList.remove('online');
+        statusText.textContent = '🔴 Offline';
+        statusText.className = 'status-offline';
       }
     }catch(e){
-      statusBox.textContent = "🔴 Offline";
-      statusBox.classList.add('offline');
+      statusText.textContent = '🔴 Offline';
+      statusText.className = 'status-offline';
     }
   }
-  fetchServerStatus();
-  setInterval(fetchServerStatus, 30000); // update la 30s
-</script>
+  updateStatus();
+  setInterval(updateStatus, 30000);
 
+  // FALLING LEAVES (SVG generation)
+  const leavesLayer = document.getElementById('leaves');
+  function makeLeaf(size, color){
+    const wrapper = document.createElement('div');
+    wrapper.style.position = 'absolute';
+    wrapper.style.left = Math.random()*100 + 'vw';
+    wrapper.style.top = '-8vh';
+    wrapper.style.width = size + 'px';
+    wrapper.style.height = size + 'px';
+    wrapper.style.pointerEvents = 'none';
+    wrapper.style.zIndex = 3;
+    // SVG element
+    const svgns = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgns,'svg');
+    svg.setAttribute('viewBox','0 0 60 60');
+    svg.setAttribute('width','100%');
+    svg.setAttribute('height','100%');
+    const path = document.createElementNS(svgns,'path');
+    path.setAttribute('d','M30 4 C36 8 42 6 46 10 C50 14 48 20 52 24 C56 28 50 32 48 36 C46 40 50 46 44 50 C38 54 32 50 28 48 C24 46 20 50 16 48 C12 46 8 42 10 38 C12 34 8 30 12 26 C16 22 20 22 26 18 C28 16 30 12 30 4 Z');
+    path.setAttribute('fill', color);
+    path.setAttribute('stroke','rgba(0,0,0,0.08)');
+    path.setAttribute('stroke-width','0.6');
+    svg.appendChild(path);
+    wrapper.appendChild(svg);
+    leavesLayer.appendChild(wrapper);
+
+    // animate using JS transforms
+    const duration = 6000 + Math.random()*7000;
+    const drift = (Math.random()*140) - 70;
+    const rotate = (Math.random()*720) + 180;
+    requestAnimationFrame(() => {
+      wrapper.style.transition = `transform ${duration}ms linear, opacity ${duration}ms linear`;
+      wrapper.style.transform = `translate(${drift}px, ${window.innerHeight + 120}px) rotate(${rotate}deg)`;
+      wrapper.style.opacity = '0.05';
+    });
+    setTimeout(()=> wrapper.remove(), duration + 300);
+  }
+  setInterval(()=> {
+    const r = Math.random();
+    if(r < 0.7) makeLeaf(16 + Math.random()*28, ['#ff8c00','#ffa500','#ff6b00','#ff4d00'][Math.floor(Math.random()*4)]);
+    else { makeLeaf(18 + Math.random()*36, '#ff7b2d'); setTimeout(()=> makeLeaf(14 + Math.random()*20, '#ffa64d'), 160); }
+  }, 420);
+
+  // FIRST VISIT animations
+  const root = document.documentElement;
+  (function checkFirstVisit(){
+    const visited = localStorage.getItem('cz_visited_v1');
+    if(!visited){
+      document.body.classList.add('animate');
+      localStorage.setItem('cz_visited_v1','1');
+      // we remove animate class after animations complete to avoid permanent heavy animations
+      setTimeout(()=> document.body.classList.remove('animate'), 3000);
+    }
+  })();
+
+  // stagger reveal for cards when animate active (so each card doesn't animate same time)
+  // (cards animation via CSS keyframes with no JS needed; CSS applies when .animate present)
+</script>
 </body>
-</html>
+          </html>
