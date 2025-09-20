@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
@@ -10,100 +10,163 @@
     --bg-dark: #000000;
     --card-bg: rgba(22,22,22,0.95);
     --accent: #ff8c00;
+    --blue: #1f6feb;
+    --blue-dark: #154fa8;
   }
   html,body{height:100%;margin:0;background:var(--bg-dark);color:#fff;font-family:Roboto, sans-serif;}
 
-/* layout */
-  header{position:relative;z-index:6;padding:28px 16px 8px 16px;display:flex;align-items:center;gap:12px;}
-  /* hamburger */
+/* header: hamburger + logo stacked */
+  header{position:relative;z-index:6;padding:12px 16px 8px 16px;display:flex;align-items:flex-start;gap:12px;}
+  .leftCol{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
   .hamburger{
     width:44px;height:44px;border-radius:10px;background:linear-gradient(180deg,#111,#0b0b0b);
     display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid rgba(255,255,255,0.03);
     box-shadow:0 6px 18px rgba(0,0,0,0.6);
   }
   .hamburger .bar{width:20px;height:2px;background:#fff;margin:3px 0;border-radius:2px;opacity:.9}
-
-  /* slide menu */
-  .sideMenu{position:fixed;left:12px;top:70px;background:linear-gradient(180deg,#071017, #0b0b0b);
-    padding:10px;border-radius:12px;display:none;flex-direction:column;gap:8px;z-index:20;box-shadow:0 8px 30px rgba(0,0,0,0.6);}
-  .sideMenu a{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;text-decoration:none;color:#fff;background:transparent;font-weight:600;}
-  .sideMenu a:hover{background:rgba(255,255,255,0.03)}
-
-  /* logo rainbow text */
   .logo{
-    margin:0 auto; font-family: 'Press Start 2P', cursive; font-size:46px;
+    font-family: 'Press Start 2P', cursive;
+    font-size:36px;
     background: linear-gradient(90deg,#ff005d,#ff7a00,#ffd700,#44ff00,#00d4ff,#4b3bff,#ff2ee8);
     background-size:400% 100%;
     -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-    animation: rainbowShift 6s linear infinite; text-align:center;
+    animation: rainbowShift 6s linear infinite;
+    text-align:left;
     text-shadow: 0 6px 18px rgba(0,0,0,0.6);
+    margin-left:2px;
   }
   @keyframes rainbowShift { 0%{background-position:0%} 50%{background-position:100%} 100%{background-position:0%} }
 
-  /* central status box */
-  .status-box{max-width:920px;margin:20px auto;padding:18px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 10px 30px rgba(0,0,0,0.7);border:1px solid rgba(255,255,255,0.02)}
-  .server-info{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
-  .server-ip{background:var(--card-bg);padding:10px 14px;border-radius:10px;font-weight:700;border:1px solid rgba(255,255,255,0.03)}
+/* SIDE MENU (slide from left) */
+  .sideMenu{
+    position:fixed;
+    left:12px;
+    top:86px;
+    width:220px;
+    max-width:70vw;
+    background:linear-gradient(180deg, rgba(25,45,80,0.98), rgba(10,20,40,0.95));
+    padding:12px;
+    border-radius:12px;
+    display:none; /* toggled by JS */
+    flex-direction:column;
+    gap:10px;
+    z-index:9999;
+    box-shadow:0 12px 40px rgba(0,0,0,0.6);
+    border:1px solid rgba(255,255,255,0.03);
+    transform: translateX(-6px);
+    transition: transform .18s ease, opacity .18s ease;
+    opacity:0;
+    will-change: transform, opacity;
+  }
+  .sideMenu.show{
+    display:flex;
+    transform: translateX(0);
+    opacity:1;
+  }
+  .sideMenu a{
+    display:block;
+    padding:10px 12px;
+    border-radius:10px;
+    text-decoration:none;
+    color: white;
+    font-weight:700;
+    background: linear-gradient(90deg,var(--blue),var(--blue-dark));
+    box-shadow: 0 6px 18px rgba(31,111,235,0.14);
+    transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+    text-align:left;
+  }
+  .sideMenu a small{display:block;font-weight:400;opacity:0.9;font-size:12px;color:rgba(255,255,255,0.92)}
+  .sideMenu a:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(21,79,168,0.18);
+  }
+  .sideMenu .sep{height:1px;background:rgba(255,255,255,0.03);margin:6px 0;border-radius:2px}
+
+/* SERVER BANNER (in flow) */
+  .server-banner{
+    margin: 12px auto;
+    width: calc(100% - 40px);
+    max-width: 920px;
+    padding:16px 20px;
+    border-radius:12px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.7);
+    border:1px solid rgba(255,255,255,0.02);
+    text-align:center;
+    transition: none;
+  }
+  .server-banner .title{font-size:13px;color:#cfcfcf}
+  .server-banner .status{font-weight:700}
+  .server-banner .server-ip{background:var(--card-bg);padding:10px 16px;border-radius:12px;font-weight:800;border:1px solid rgba(255,255,255,0.03);margin-top:6px}
   .copy-btn{background:#222;border:0;padding:8px 10px;border-radius:8px;cursor:pointer;color:#ffd27a;font-weight:700}
   .status-online{color:#7CFF9A;font-weight:700}
   .status-offline{color:#FF7C7C;font-weight:700}
 
-  /* icon cards grid (2 per row) */
-  .cards{max-width:980px;margin:36px auto;display:grid;grid-template-columns:repeat(2,1fr);gap:28px;padding:0 16px;z-index:5;position:relative}
+/* main content */
+  main{}
+
+  .cards{max-width:980px;margin:20px auto 36px; display:grid;grid-template-columns:repeat(2,1fr);gap:28px;padding:0 16px;z-index:5;position:relative}
   .card{background:var(--card-bg);border-radius:14px;padding:34px;display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;color:#fff;border:1px solid rgba(255,255,255,0.02);box-shadow:0 12px 30px rgba(0,0,0,0.6);transition:transform .25s ease}
   .card:hover{transform:translateY(-8px)}
   .card-emoji{font-size:44px}
   .card-title{font-family:'Press Start 2P';font-size:18px;margin-top:6px}
 
-  /* footer band */
-  footer{position:fixed;left:0;right:0;bottom:0;background:#000;padding:12px 8px;text-align:center;font-weight:700;border-top:2px solid rgba(255,140,0,0.05);z-index:10}
+  .more-info{max-width:980px;margin:30px auto;padding:22px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border:1px solid rgba(255,255,255,0.02);line-height:1.6;color:#cfdfee}
+
+  footer{left:0;right:0;background:#000;padding:20px 8px;text-align:center;font-weight:700;border-top:2px solid rgba(255,140,0,0.05);z-index:10;margin-top:30px}
   footer small{display:block;color:#bfbfbf;font-weight:400;margin-top:6px}
 
-  /* leaves layer */
-  .leaves{position:fixed;inset:0;pointer-events:none;z-index:3;overflow:hidden}
-
-  /* first-visit animations */
-  .animate .logo{animation:rainbowShift 5s linear infinite, fadeInUp .9s cubic-bezier(.2,.9,.2,1)}
-  .animate .cards .card{animation:cardIn .8s cubic-bezier(.2,.9,.2,1) both}
-  .animate .status-box{animation:fadeInUp .9s .1s both}
-  @keyframes fadeInUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-  @keyframes cardIn{0%{opacity:0;transform:translateY(26px) scale(.98)}100%{opacity:1;transform:none}}
-
-  /* responsive */
-  @media(max-width:800px){.cards{grid-template-columns:1fr}.logo{font-size:38px}}
+/* responsive */
+  @media(max-width:800px){
+    .cards{grid-template-columns:1fr}.logo{font-size:30px}
+    .server-banner{width:calc(100% - 24px)}
+    .sideMenu{left:8px;top:80px;width:64vw}
+  }
 </style>
 </head>
 <body>
   <header>
-    <div class="hamburger" id="hamburger" title="Meniu">
-      <div style="display:flex;flex-direction:column;align-items:center">
-        <div class="bar" style="width:18px"></div>
-        <div class="bar" style="width:14px"></div>
-        <div class="bar" style="width:10px"></div>
+    <div class="leftCol">
+      <div class="hamburger" id="hamburger" title="Menu" aria-expanded="false" aria-controls="sideMenu">
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="bar" style="width:18px"></div>
+          <div class="bar" style="width:14px"></div>
+          <div class="bar" style="width:10px"></div>
+        </div>
       </div>
+      <div class="logo" id="logo">CustomZone</div>
     </div>
-
-    <div class="logo" id="logo">CustomZone</div>
   </header>
 
-  <!-- side menu -->
-  <div class="sideMenu" id="sideMenu">
-    <a href="https://discord.gg/emajm8bgRN" target="_blank">💬 Discord</a>
-    <a href="https://www.youtube.com/@sn1perxyt" target="_blank">▶️ YouTube</a>
-  </div>
+  <!-- side menu (initially hidden) -->
+  <nav id="sideMenu" class="sideMenu" aria-hidden="true">
+    <a href="https://discord.gg/emajm8bgRN" target="_blank" rel="noopener" data-close>
+      💬 Discord
+      <small>Join our support community</small>
+    </a>
+    <div class="sep"></div>
+    <a href="https://www.youtube.com/@sn1perxyt" target="_blank" rel="noopener" data-close>
+      ▶️ YouTube
+      <small>Subscribe for videos & events</small>
+    </a>
+  </nav>
 
-  <!-- server status -->
-  <div class="status-box" id="statusBox" aria-live="polite">
-    <div style="font-size:13px;color:#cfcfcf">Server</div>
-    <div class="server-info">
-      <div id="statusText" class="status-offline">Checking...</div>
-      <div class="server-ip">138.201.48.55:19457</div>
-      <div class="server-ip" title="Click to copy czs.zapto.org:19457" id="copyTarget">czs.zapto.org:19457</div>
+  <!-- SERVER BANNER placed in normal document flow, under the logo -->
+  <div class="server-banner" role="region" aria-label="Server status">
+    <div class="title">Server</div>
+    <div id="statusText" class="status-offline status">Checking...</div>
+    <div style="font-size:13px;color:#cfcfcf">Current season: <strong id="seasonText">The Haunted Season</strong></div>
+    <div style="font-size:13px;color:#cfcfcf">Version: <strong id="versionText">0.14.3 - 0.15.10</strong></div>
+    <div class="server-ip" id="copyTarget">czs.zapto.org:19457</div>
+    <div style="margin-top:8px">
       <button class="copy-btn" id="copyBtn">Copy IP</button>
     </div>
   </div>
 
-  <!-- main cards -->
   <main>
     <section class="cards" id="cards">
       <a class="card" href="rules.html">
@@ -121,121 +184,122 @@
         <div class="card-title">Ranks</div>
       </a>
 
-      <a class="card" href="money.html">
-        <div class="card-emoji">💰</div>
-        <div class="card-title">Money</div>
+      <a class="card" href="staff.html">
+        <div class="card-emoji">🛡️</div>
+        <div class="card-title">Staff</div>
       </a>
+    </section>
+
+    <section class="more-info">
+      <h3>How to connect?</h3>
+      <p>
+        Install a Minecraft client that runs on version <strong>0.14.3</strong> or <strong>0.15.10</strong> (download MCPE 0.15.10 or 0.14.3), add the IP/port shown above, and connect!
+      </p>
+
+      <h3>Need help?</h3>
+      <p>
+        Join our Discord server or check the rules/events pages. We'll try to help you as fast as possible!
+      </p>
+
+      <h3>Want a rank?</h3>
+      <p>
+        You can get a rank by:
+        <ul>
+          <li>Participating in events</li>
+          <li>Top #1 PlayTime</li>
+          <li>Inviting friends or boosting our Discord server</li>
+        </ul>
+        Good luck!
+      </p>
     </section>
   </main>
 
-  <!-- leaves layer (SVG leaves injected by JS) -->
-  <div class="leaves" id="leaves"></div>
-
   <footer>
     Just a simple server
-    <small>(IP: 138.201.48.55:19457)</small>
+    <small>(Host displayed: czs.zapto.org:19457)</small>
   </footer>
 
 <script>
-  // SIDE MENU toggle
+  // SIDE MENU toggle with outside-click close + close on link click
   const hamburger = document.getElementById('hamburger');
   const sideMenu = document.getElementById('sideMenu');
-  hamburger.addEventListener('click', ()=> {
-    sideMenu.style.display = sideMenu.style.display === 'flex' ? 'none' : 'flex';
+
+  function openMenu(){
+    sideMenu.classList.add('show');
+    sideMenu.setAttribute('aria-hidden','false');
+    hamburger.setAttribute('aria-expanded','true');
+    // trap focus optionally (not implemented fully here)
+  }
+  function closeMenu(){
+    sideMenu.classList.remove('show');
+    sideMenu.setAttribute('aria-hidden','true');
+    hamburger.setAttribute('aria-expanded','false');
+  }
+
+  hamburger.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    sideMenu.classList.contains('show') ? closeMenu() : openMenu();
   });
 
-  // COPY IP
-  const copyBtn = document.getElementById('copyBtn');
-  const copyTarget = document.getElementById('copyTarget').textContent;
-  copyBtn.addEventListener('click', async () => {
-    try{
-      await navigator.clipboard.writeText(copyTarget);
-      copyBtn.textContent = 'Copied!';
-      setTimeout(()=> copyBtn.textContent = 'Copy IP', 1400);
-    }catch(e){
-      copyBtn.textContent = 'Copy failed';
-      setTimeout(()=> copyBtn.textContent = 'Copy IP', 1400);
+  // close on link click (links have data-close)
+  sideMenu.querySelectorAll('[data-close]').forEach(a=>{
+    a.addEventListener('click', ()=>{
+      closeMenu();
+    });
+  });
+
+  // close when clicking outside menu
+  document.addEventListener('click', (e)=>{
+    if(!sideMenu.contains(e.target) && !hamburger.contains(e.target)){
+      closeMenu();
     }
   });
 
-  // SERVER STATUS (mcsrvstat API)
+  // keyboard: Esc to close
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape') closeMenu();
+  });
+
+  // COPY IP (same as before)
+  const copyBtn = document.getElementById('copyBtn');
+  const copyTargetText = document.getElementById('copyTarget').textContent;
+  async function doCopyFeedback(btn){
+    try{
+      await navigator.clipboard.writeText(copyTargetText);
+      const prev = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(()=> btn.textContent = prev, 1400);
+    }catch(e){
+      const prev = btn.textContent;
+      btn.textContent = 'Copy failed';
+      setTimeout(()=> btn.textContent = prev, 1400);
+    }
+  }
+  copyBtn.addEventListener('click', ()=> doCopyFeedback(copyBtn));
+
+  // SERVER STATUS (unchanged)
+  const numericCheck = '138.201.48.55:19457';
   async function updateStatus(){
     const statusText = document.getElementById('statusText');
     try{
-      const res = await fetch('https://api.mcsrvstat.us/2/138.201.48.55:19457');
+      const res = await fetch('https://api.mcsrvstat.us/2/' + encodeURIComponent(numericCheck));
       const data = await res.json();
       if(data && data.online){
-        statusText.textContent = `🟢 Online | Players: ${data.players?.online ?? 0}/${data.players?.max ?? '?'}`;
-        statusText.className = 'status-online';
+        const players = data.players?.online ?? 0;
+        const maxPlayers = data.players?.max ?? '?';
+        statusText.textContent = `🟢 Online | Players: ${players}/${maxPlayers}`;
+        statusText.className = 'status-online status';
       } else {
         statusText.textContent = '🔴 Offline';
-        statusText.className = 'status-offline';
+        statusText.className = 'status-offline status';
       }
     }catch(e){
       statusText.textContent = '🔴 Offline';
-      statusText.className = 'status-offline';
+      statusText.className = 'status-offline status';
     }
   }
   updateStatus();
   setInterval(updateStatus, 30000);
-
-  // FALLING LEAVES (SVG generation)
-  const leavesLayer = document.getElementById('leaves');
-  function makeLeaf(size, color){
-    const wrapper = document.createElement('div');
-    wrapper.style.position = 'absolute';
-    wrapper.style.left = Math.random()*100 + 'vw';
-    wrapper.style.top = '-8vh';
-    wrapper.style.width = size + 'px';
-    wrapper.style.height = size + 'px';
-    wrapper.style.pointerEvents = 'none';
-    wrapper.style.zIndex = 3;
-    // SVG element
-    const svgns = "http://www.w3.org/2000/svg";
-    const svg = document.createElementNS(svgns,'svg');
-    svg.setAttribute('viewBox','0 0 60 60');
-    svg.setAttribute('width','100%');
-    svg.setAttribute('height','100%');
-    const path = document.createElementNS(svgns,'path');
-    path.setAttribute('d','M30 4 C36 8 42 6 46 10 C50 14 48 20 52 24 C56 28 50 32 48 36 C46 40 50 46 44 50 C38 54 32 50 28 48 C24 46 20 50 16 48 C12 46 8 42 10 38 C12 34 8 30 12 26 C16 22 20 22 26 18 C28 16 30 12 30 4 Z');
-    path.setAttribute('fill', color);
-    path.setAttribute('stroke','rgba(0,0,0,0.08)');
-    path.setAttribute('stroke-width','0.6');
-    svg.appendChild(path);
-    wrapper.appendChild(svg);
-    leavesLayer.appendChild(wrapper);
-
-    // animate using JS transforms
-    const duration = 6000 + Math.random()*7000;
-    const drift = (Math.random()*140) - 70;
-    const rotate = (Math.random()*720) + 180;
-    requestAnimationFrame(() => {
-      wrapper.style.transition = `transform ${duration}ms linear, opacity ${duration}ms linear`;
-      wrapper.style.transform = `translate(${drift}px, ${window.innerHeight + 120}px) rotate(${rotate}deg)`;
-      wrapper.style.opacity = '0.05';
-    });
-    setTimeout(()=> wrapper.remove(), duration + 300);
-  }
-  setInterval(()=> {
-    const r = Math.random();
-    if(r < 0.7) makeLeaf(16 + Math.random()*28, ['#ff8c00','#ffa500','#ff6b00','#ff4d00'][Math.floor(Math.random()*4)]);
-    else { makeLeaf(18 + Math.random()*36, '#ff7b2d'); setTimeout(()=> makeLeaf(14 + Math.random()*20, '#ffa64d'), 160); }
-  }, 420);
-
-  // FIRST VISIT animations
-  const root = document.documentElement;
-  (function checkFirstVisit(){
-    const visited = localStorage.getItem('cz_visited_v1');
-    if(!visited){
-      document.body.classList.add('animate');
-      localStorage.setItem('cz_visited_v1','1');
-      // we remove animate class after animations complete to avoid permanent heavy animations
-      setTimeout(()=> document.body.classList.remove('animate'), 3000);
-    }
-  })();
-
-  // stagger reveal for cards when animate active (so each card doesn't animate same time)
-  // (cards animation via CSS keyframes with no JS needed; CSS applies when .animate present)
 </script>
 </body>
-          </html>
+</html>
