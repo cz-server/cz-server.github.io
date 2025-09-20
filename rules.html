@@ -1,72 +1,201 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>CustomZone — Rules</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
-  body{margin:0;background:#000;color:#fff;font-family:Roboto, sans-serif;padding:28px}
-  .wrap{max-width:980px;margin:0 auto}
-  h1{font-family:'Press Start 2P';color:#ffb347;text-align:center}
-  .section{background:rgba(255,255,255,0.02);padding:18px;border-radius:12px;margin:14px 0;border:1px solid rgba(255,255,255,0.02)}
-  .note{color:#cfcfcf;font-size:14px;margin-bottom:8px}
-  .rule{margin:8px 0;padding-left:10px}
-  a.back{color:#ffd27a;text-decoration:underline;display:inline-block;margin-top:12px}
+  :root{
+    --bg:#020617;
+    --card-bg: rgba(22,22,22,0.95);
+    --accentA:#ff005d; --accentB:#4b3bff;
+    --muted: #cfdfee;
+    --accent-btn: #1f6feb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:#fff;font-family:Roboto,system-ui,Arial;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1100px;margin:18px auto;padding:18px}
+
+/* header area: centered logo + Rules title underneath */
+  .hero{
+    text-align:center;
+    margin-bottom:14px;
+  }
+  .logo{
+    font-family: 'Press Start 2P', cursive;
+    font-size:56px;
+    line-height:1;
+    background: linear-gradient(90deg,var(--accentA),#ff7a00,#ffd700,#44ff00,#00d4ff,var(--accentB),#ff2ee8);
+    background-size:400% 100%;
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    animation: rainbowShift 6s linear infinite;
+    margin: 6px 0 6px 0;
+    display:inline-block;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  }
+  @keyframes rainbowShift { 0%{background-position:0%} 50%{background-position:100%} 100%{background-position:0%} }
+
+  .pageTitle{
+    font-family: 'Press Start 2P';
+    font-size:30px;
+    color:var(--muted);
+    margin-top:6px;
+    letter-spacing:0.6px;
+  }
+
+  .topRow{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:22px 0}
+  .cmdBox{background:rgba(255,255,255,0.03);padding:10px 14px;border-radius:10px;font-family:monospace;font-weight:700}
+  .usage{color:#9fb4d9;font-size:13px}
+  .nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .nav a{background:var(--accent-btn);padding:8px 10px;border-radius:8px;color:#fff;text-decoration:none;font-weight:700;display:inline-block}
+
+  .card{background:var(--card-bg);border-radius:14px;padding:18px;box-shadow:0 12px 30px rgba(0,0,0,0.6);margin-bottom:18px;border:1px solid rgba(255,255,255,0.02)}
+  h2.sectionTitle{margin:0 0 8px 0;color:#a8cfff;font-size:18px}
+  .ruleList{padding-left:18px; margin-top:8px}
+  .ruleList li{margin-bottom:10px;line-height:1.45}
+  .punishment{margin-top:6px;color:#9ffcad;font-weight:700}
+
+  .footer{margin-top:20px;color:#9fb4d9;font-size:13px;text-align:center}
+
+/* small screens */
+  @media(max-width:920px){
+    .logo{font-size:44px}
+    .pageTitle{font-size:24px}
+    .topRow{flex-direction:column;align-items:flex-start}
+    .nav{margin-left:0;width:100%}
+  }
+  @media(max-width:520px){
+    .logo{font-size:36px}
+    .pageTitle{font-size:20px}
+  }
 </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>Server Rules</h1>
 
-    <div class="section">
-      <div class="note"><strong>What you need to know:</strong></div>
-      <div class="rule">1. If you play on our server, you are responsible for knowing all the server rules.</div>
-      <div class="rule">2. Ignorance of the rules does not exempt you from punishment — you are responsible for being aware of them.</div>
-      <div class="rule">3. If someone hacks into your account and abuses your rank or breaks the rules, we are not responsible for that — you are.</div>
-      <div class="rule">4. The server staff roles are: Police, Manager, Developer, CZ-Builder, Dep.Owner, Creator.</div>
-      <div class="rule">5. Rank suspension is permanent in some cases, so be careful.</div>
+    <!-- HERO: CustomZone (logo) and Rules title below -->
+    <header class="hero" role="banner" aria-label="CustomZone header">
+      <div class="logo" aria-hidden="false">CustomZone</div>
+      <div class="pageTitle" role="heading" aria-level="1">Rules</div>
+    </header>
+
+    <!-- command + quick nav -->
+    <div class="topRow" role="navigation" aria-label="Rules navigation">
+      <div>
+        <div class="cmdBox">Cmd: <span style="color:#ffc57a">/rules</span></div>
+        <div class="usage">Usage: <span style="color:#ffd27a">/rules &lt;page 1-6&gt;</span></div>
+      </div>
+
+      <nav class="nav" aria-label="Rules pages">
+        <a href="#p1">Page 1</a>
+        <a href="#p2">Page 2</a>
+        <a href="#p3">Page 3</a>
+        <a href="#p4">Page 4</a>
+        <a href="#p5">Page 5</a>
+        <a href="#p6">Page 6</a>
+      </nav>
     </div>
 
-    <div class="section">
-      <div class="note"><strong>Server rules (page 2/6)</strong></div>
-      <div class="rule">1.1 Spam, flood, insults, 18+ content, and excessive vulgar or offensive language in chat is forbidden. Punishment: warn, tempmute 30m/90m, ban.</div>
-      <div class="rule">1.2 Begging in any form is forbidden. Punishment: warn, tempmute 30m/12h, ban-cid.</div>
-      <div class="rule">1.3 Creating advertisements or promoting other servers is forbidden. Punishment: ban-ip, psban.</div>
-      <div class="rule">1.4 Using offensive language against the server is forbidden. Punishment: warn, tempmute, psban.</div>
-    </div>
+    <!-- Page 1 -->
+    <section id="p1" class="card" aria-labelledby="p1title">
+      <h2 id="p1title" class="sectionTitle">Page 1/6 — What you need to know</h2>
+      <ul class="ruleList">
+        <li><strong>1.</strong> If you play on our server, you are <strong>responsible</strong> for knowing all the server rules.</li>
+        <li><strong>2.</strong> <strong>Ignorance</strong> of the rules does not <strong>exempt</strong> you from punishment — you are responsible for being aware of them.</li>
+        <li><strong>3.</strong> If someone hacks into your account and abuses your rank or breaks the rules, we are not responsible for that — <strong>you are</strong>!</li>
+        <li><strong>4.</strong> The server staff positions are: Police, Manager, Developer, CZ-Builder, Dep.Owner, Creator.</li>
+        <li><strong>5.</strong> Rank suspension is permanent, so be careful!</li>
+      </ul>
+    </section>
 
-    <div class="section">
-      <div class="note"><strong>Server rules (page 3/6)</strong></div>
-      <div class="rule">2.1 Use of game modifications, hacks, or third-party software is forbidden. Punishment: tempban 48h, ban, ban-cid, ban-ip.</div>
-      <div class="rule">2.2 Griefing after teleporting to a player, or killing them via /tp, is prohibited. Punishment: warn, tempban 24h, ban, rank withdrawal.</div>
-      <div class="rule">2.3 Using building commands in protected areas without permission is prohibited. Punishment: ban, rank withdrawal.</div>
-      <div class="rule">2.4 Using Creative mode or Fly in the PvP arena is prohibited. Punishment: kick, tempban 24h, ban.</div>
-      <div class="rule">2.5 Teleporting to a player without permission when they ask you to leave is forbidden. Punishment: kick, warn, tempban 48h, ban, rank withdrawal.</div>
-    </div>
+    <!-- Page 2 -->
+    <section id="p2" class="card" aria-labelledby="p2title">
+      <h2 id="p2title" class="sectionTitle">Page 2/6</h2>
+      <ul class="ruleList">
+        <li><strong>1.1</strong> Spam, flood, insults, 18+ content, and excessive vulgar or offensive language in chat is forbidden.
+          <div class="punishment">Punishment: /warn, /tempmute 30m, /tempmute 90m, /ban</div>
+        </li>
+        <li><strong>1.2</strong> Begging in any form is forbidden.
+          <div class="punishment">Punishment: /warn, /tempmute 30m, /tempmute 12h, /ban-cid</div>
+        </li>
+        <li><strong>1.3</strong> Creating advertisements or promoting other servers is forbidden.
+          <div class="punishment">Punishment: /ban-ip, /psban</div>
+        </li>
+        <li><strong>1.4</strong> Using offensive language against the server is forbidden.
+          <div class="punishment">Punishment: /warn, /tempmute 30m, /tempmute 90m, /psban</div>
+        </li>
+      </ul>
+    </section>
 
-    <div class="section">
-      <div class="note"><strong>Server rules (page 4/6)</strong></div>
-      <div class="rule">3.1 Creating regions, account names, or clan names with vulgar or 18+ content is forbidden. Punishment: warn, ban, ban-cid.</div>
-      <div class="rule">3.2 Logging into accounts that do not belong to you (especially staff accounts) is forbidden. Punishment: kick, ban-ip, psban.</div>
-      <div class="rule">3.3 Building or placing signs with 18+ content is forbidden. Punishment: tempban 24h, ban, ban-cid.</div>
-      <div class="rule">3.4 Disrupting server functionality (creating lag) is forbidden. Punishment: tempban 48h, ban, psban.</div>
-    </div>
+    <!-- Page 3 -->
+    <section id="p3" class="card" aria-labelledby="p3title">
+      <h2 id="p3title" class="sectionTitle">Page 3/6</h2>
+      <ul class="ruleList">
+        <li><strong>2.1</strong> Use of game modifications, hacks, or third-party software is forbidden.
+          <div class="punishment">Punishment: /tempban 48h, /ban, /ban-cid, /ban-ip</div>
+        </li>
+        <li><strong>2.2</strong> Griefing after teleporting to a player, or killing them via /tp is forbidden.
+          <div class="punishment">Punishment: /warn, /tempban 24h, /ban, rank withdrawal</div>
+        </li>
+        <li><strong>2.3</strong> Using building commands in protected areas without the owner's permission is prohibited.
+          <div class="punishment">Punishment: /ban, rank withdrawal</div>
+        </li>
+        <li><strong>2.4</strong> Using Creative mode or Fly in the PvP arena is prohibited.
+          <div class="punishment">Punishment: /kick, /tempban 24h, /ban</div>
+        </li>
+        <li><strong>2.5</strong> Teleporting to a player without their permission (if the player asks you to leave the area) is forbidden.
+          <div class="punishment">Punishment: /kick, /warn, /tempban 48h, /ban, rank withdrawal</div>
+        </li>
+      </ul>
+    </section>
 
-    <div class="section">
-      <div class="note"><strong>Server rules (page 5/6)</strong></div>
-      <div class="rule">4.1 Abusing commands such as /cc, /tell or similar is forbidden. Punishment: warn, kick, tempban 48h, ban-ip, rank withdrawal.</div>
-      <div class="rule">4.2 Punishing players with non-existent or incorrect reasons is prohibited. Punishment: tempban 24h/7d, ban, rank withdrawal.</div>
-      <div class="rule">4.3 AFK abuse. Punishment: kick, tempban 24h, ban.</div>
-    </div>
+    <!-- Page 4 -->
+    <section id="p4" class="card" aria-labelledby="p4title">
+      <h2 id="p4title" class="sectionTitle">Page 4/6</h2>
+      <ul class="ruleList">
+        <li><strong>3.1</strong> Creating regions, account names, or clan names with vulgar or 18+ content is forbidden.
+          <div class="punishment">Punishment: Warn in chat, /warn, /ban, /ban-cid</div>
+        </li>
+        <li><strong>3.2</strong> Logging into accounts that do not belong to you, especially Administration accounts, is forbidden.
+          <div class="punishment">Punishment: /kick, /ban-ip, /psban</div>
+        </li>
+        <li><strong>3.3</strong> Building or placing signs with 18+ content in any form is forbidden.
+          <div class="punishment">Punishment: /tempban 24h, /ban, /ban-cid</div>
+        </li>
+        <li><strong>3.4</strong> Disrupting server functionality (creating lag) is forbidden.
+          <div class="punishment">Punishment: /tempban 48h, /ban, /psban</div>
+        </li>
+      </ul>
+    </section>
 
-    <div class="section">
-      <div class="note"><strong>Something else you need to know:</strong></div>
-      <div class="rule">1. If a player attempts to bypass a punishment or rejoins with another account and breaks rules again, a /ban-ip or /ban-cid may be executed (reason: 'Bypass').</div>
-      <div class="rule">2. If you have been punished without reason or invalidly, contact us on Discord and present evidence. If you don't have evidence, create a ticket with /ticket.</div>
-      <div class="rule">3. /psban is a staff-only command and permanently bans a player with no possibility of unban.</div>
-    </div>
+    <!-- Page 5 -->
+    <section id="p5" class="card" aria-labelledby="p5title">
+      <h2 id="p5title" class="sectionTitle">Page 5/6</h2>
+      <ul class="ruleList">
+        <li><strong>4.1</strong> Abusing commands such as /cc, /tell, or other similar commands is forbidden.
+          <div class="punishment">Punishment: warn, /kick, /tempban 48h, /ban-ip, rank withdrawal</div>
+        </li>
+        <li><strong>4.2</strong> Punishing players with non-existent or incorrect reasons is prohibited.
+          <div class="punishment">Punishment: /tempban 24h, /tempban 7d, /ban, rank withdrawal</div>
+        </li>
+        <li><strong>4.3</strong> AFK (away from keyboard) abuse / long AFK is managed (rules apply).
+          <div class="punishment">Punishment: /kick 2/2, /tempban 24h, /ban</div>
+        </li>
+      </ul>
+    </section>
 
-    <a class="back" href="index.html">← Back to home</a>
+    <!-- Page 6 -->
+    <section id="p6" class="card" aria-labelledby="p6title">
+      <h2 id="p6title" class="sectionTitle">Page 6/6 — Notes</h2>
+      <ul class="ruleList">
+        <li><strong>1.</strong> If a player attempts to bypass a punishment or joins on another account and breaks the rules again, a /ban-ip or /ban-cid may be executed with the reason "Bypass".</li>
+        <li><strong>2.</strong> If you have been punished without a reason or with an invalid one, please contact us on Discord. It is necessary to have evidence! If you don't have any: create a ticket with /ticket.</li>
+        <li><strong>3.</strong> /psban is a command that can only be used by staff, and it permanently bans a player with no possibility of unban.</li>
+      </ul>
+    </section>
+
+    <div class="footer">These are the server rules — follow them to keep the server safe and fun for everyone.</div>
   </div>
 </body>
-      </html>
+</html>
