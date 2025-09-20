@@ -1,38 +1,399 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>CustomZone — Ranks</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
-  body{margin:0;background:#000;color:#fff;font-family:Roboto, sans-serif;padding:24px}
-  .wrap{max-width:920px;margin:0 auto}
-  h1{font-family:'Press Start 2P';color:#ffb347;text-align:center}
-  .block{background:rgba(255,255,255,0.02);padding:14px;border-radius:10px;margin:12px 0;border:1px solid rgba(255,255,255,0.02)}
-  .cmd{font-weight:700;color:#ffd27a}
-  a.back{color:#ffd27a;text-decoration:underline;display:inline-block;margin-top:12px}
+  :root{
+    --bg:#05060a;
+    --card-bg: rgba(22,22,22,0.95);
+    --accentA:#3ee04b;
+    --accentB:#6ef0ff;
+    --muted:#cfdfee;
+    --accent-btn:#1f6feb;
+    --glass: rgba(255,255,255,0.02);
+    --highlight:#ffd27a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:#fff;font-family:Roboto,system-ui,Arial;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1100px;margin:12px auto;padding:18px}
+
+/* header: big visible logo + Ranks below */
+  .hero{display:flex;flex-direction:column;align-items:center;margin-bottom:18px;text-align:center}
+  .logo{
+    font-family:'Press Start 2P';font-size:64px;line-height:1;
+    color: transparent;
+    background: linear-gradient(90deg,#6ef04f,#b8ff6a,#ffd27a,#ffd27a);
+    -webkit-background-clip:text;
+    background-clip:text;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    margin:0;
+  }
+  .pageTitle{
+    font-family:'Press Start 2P';font-size:28px;color:var(--muted);margin-top:6px;
+  }
+
+/* top bar: only search */
+  .topbar{display:flex;gap:12px;align-items:center;justify-content:center;margin:10px 0 22px}
+  .searchBox{width:100%;max-width:720px;display:flex;gap:8px;align-items:center}
+  .searchBox input{
+    width:100%;
+    padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);
+    background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+    color:var(--muted);font-weight:700;font-size:15px;outline:none;
+    box-shadow:0 6px 16px rgba(0,0,0,0.5);
+  }
+  .searchBox input:focus{border-color:var(--accent-btn);color:#fff}
+  .searchBtn{
+    padding:10px 14px;border-radius:10px;border:0;background:var(--accent-btn);color:#fff;font-weight:800;cursor:pointer;
+  }
+
+/* layout */
+  .grid{display:grid;grid-template-columns: 1fr 1.6fr;gap:18px;align-items:start}
+  .panel{background:var(--card-bg);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 12px 30px rgba(0,0,0,0.6)}
+  .ranksList{list-style:none;padding:8px;margin:0;display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow:auto}
+  .rankBtn{
+    display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;border:0;background:transparent;color:#fff;text-align:left;cursor:pointer;font-weight:700;
+  }
+  .rankBtn:hover{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
+  .rankBtn.active{background:linear-gradient(90deg,var(--accent-btn),var(--accentB));box-shadow:0 10px 30px rgba(20,100,220,0.12)}
+  .badge{font-size:12px;color:#cfe6ff;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,0.03);margin-left:auto;font-weight:700}
+
+/* details */
+  .titleRow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between}
+  .rankTitle{font-family:'Press Start 2P';font-size:26px;margin:0}
+  .rankTag{color:var(--muted);font-weight:700}
+  .desc{margin-top:10px;color:var(--muted)}
+  .section{margin-top:14px}
+  .section h4{margin:0 0 8px 0;color:#a8cfff}
+  .perms{list-style:disc;padding-left:22px;margin:0}
+  .permItem{margin-bottom:10px;line-height:1.45}
+  .includesBox{
+    margin-top:12px;padding:10px;border-radius:10px;border:1px dashed rgba(255,255,255,0.06);background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+    color:var(--highlight);font-weight:800;
+  }
+  .limits{background:rgba(0,0,0,0.2);padding:10px;border-radius:8px;margin-top:8px;color:#9ffcad;font-weight:700}
+
+  footer{margin-top:26px;text-align:center;color:#9fb4d9;font-size:13px}
+
+/* small screens */
+  @media(max-width:980px){
+    .grid{grid-template-columns:1fr}
+    .logo{font-size:48px}
+    .rankTitle{font-size:20px}
+  }
+  @media(max-width:560px){
+    .logo{font-size:38px}
+    .pageTitle{font-size:20px}
+  }
 </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>CustomZone Ranks</h1>
+    <header class="hero" role="banner">
+      <div class="logo" aria-hidden="false">CustomZone</div>
+      <div class="pageTitle">Ranks</div>
+    </header>
 
-    <div class="block"><strong>Fly</strong> — /fly</div>
-    <div class="block"><strong>Meteorolog</strong> — /day, /night</div>
-    <div class="block"><strong>VIP</strong> — /kit vip</div>
-    <div class="block"><strong>Meteorolog</strong> — /day, /night</div>
-    <div class="block"><strong>Creative</strong></div>
-    <div class="block"><strong>AntiGriefer</strong></div>
-    <div class="block"><strong>Admin</strong></div>
-    <div class="block"><strong>Operator</strong></div>
-    <div class="block"><strong>Deputy</strong></div>
-    <div class="block"><strong>Helper</strong></div>
-    <div class="block"><strong>Elite</strong></div>
-    <div class="block"><strong>AntiGriefer+</strong></div>
-    <div class="block"><strong>COR-Status</strong></div>
-    <div class="block"><strong>Celestial</strong> — /freez</div>
+    <div class="topbar" role="search">
+      <div class="searchBox" style="width:100%">
+        <input id="search" placeholder="Search rank" aria-label="Search rank" autocomplete="off" />
+        <button id="searchAll" class="searchBtn" title="Show all ranks">Show all</button>
+      </div>
+    </div>
 
-    <a class="back" href="index.html">← Back to home</a>
+    <div class="grid" role="main">
+      <!-- left: ranks list (hidden until search focus or Show all) -->
+      <aside class="panel" aria-label="Ranks list">
+        <h3 style="margin:0 0 10px 0;color:#cfe6ff">Ranks</h3>
+        <div style="color:var(--muted);margin-bottom:8px">Click a rank to see details</div>
+        <ul id="ranksList" class="ranksList" role="list" aria-label="Available ranks">
+          <!-- populated by JS -->
+        </ul>
+      </aside>
+
+      <!-- right: details -->
+      <section class="panel" id="detailPanel" aria-live="polite">
+        <div class="titleRow">
+          <div>
+            <h2 id="rankTitle" class="rankTitle">Select a rank</h2>
+            <div id="rankTag" class="rankTag" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <div id="desc" class="desc">Use the search to find ranks or click "Show all".</div>
+
+        <div id="permsSection" class="section" style="display:none">
+          <h4>Permissions</h4>
+          <ul id="permsList" class="perms" role="region" aria-label="Permissions list"></ul>
+
+          <!-- separated "Includes permissions of lower ranks" area -->
+          <div id="includesBox" class="includesBox" style="display:none">Includes permissions of lower ranks</div>
+        </div>
+
+        <div id="limitsSection" class="section" style="display:none">
+          <h4>Region & block limits</h4>
+          <div id="limitsList"></div>
+        </div>
+      </section>
+    </div>
+
+    <footer>Tip: click the search box to reveal ranks; type letters to filter live.</footer>
   </div>
+
+<script>
+/* Minimal ranks dataset (only ranks with perms) */
+const RANKS = {
+  "elite": {
+    title:"Elite",
+    perms:[
+      "sendtip [tip] — send a tip message",
+      "kit ely — Elite tier kit",
+      "repair — repair items (hand/all)",
+      "setnick [nick] — set a name"
+    ],
+    limits:[{max_regions_num:8, max_region_count_blocks:225000}],
+    includesLower:true
+  },
+  "fly": {
+    title:"Fly",
+    perms:["fly — enable/disable flight mode","seen — see last time a player was online","ccme — clear your own chat"],
+    limits:[{max_regions_num:3, max_region_count_blocks:15000}],
+    includesLower:false
+  },
+  "meteo": {
+    title:"Meteorologist",
+    perms:["day — set time to day","night — set time to night"],
+    limits:[{max_regions_num:4, max_region_count_blocks:30000}],
+    aliases:["meteorolog","meteorologist"],
+    includesLower:true
+  },
+  "vip": {
+    title:"VIP",
+    perms:["back — teleport to last death point","feed — feed yourself","heal — heal yourself","kit vip — VIP tier kit","invclear [ci] — clear your inventory","chat color access"],
+    limits:[{max_regions_num:3, max_region_count_blocks:25000}],
+    includesLower:true
+  },
+  "creative": {
+    title:"Creative",
+    perms:["gm <0,1,2,3> — set your gamemode"],
+    limits:[{max_regions_num:4, max_region_count_blocks:45000}],
+    includesLower:true
+  },
+  "anti": {
+    title:"AntiGriefer",
+    perms:["tp — teleport","tph [s] — teleport player to your location","kill — kill command","vanish [v] — invisibility toggle"],
+    limits:[{max_regions_num:5, max_region_count_blocks:50000}],
+    aliases:["antigriefer"],
+    includesLower:true
+  },
+  "operator": {
+    title:"Operator",
+    perms:["ban — permanently ban a player","ban-ip — ban by IP address","setprefix — set a prefix before the rank","kit op — operator tier kit","feed others","heal others"],
+    limits:[{max_regions_num:6, max_region_count_blocks:75000}],
+    aliases:["op","operator"],
+    includesLower:true
+  },
+  "deputy": {
+    title:"Deputy",
+    perms:["give — give item to player","bancid — ban by Client ID","itid [id] — get item id","getpos — get player's position","jump — teleport where you are looking"],
+    limits:[{max_regions_num:6, max_region_count_blocks:100000}],
+    includesLower:true
+  },
+  "helper": {
+    title:"Helper",
+    perms:["c — colorful name toggle","invsave — inventory save toggle"],
+    limits:[{max_regions_num:7, max_region_count_blocks:125000}],
+    includesLower:true
+  },
+  "anti+": {
+    title:"AntiGriefer+",
+    perms:["notp — protection against teleporting","effect — apply effects","setmygroup — hide rank","//help — WorldEdit commands access"],
+    limits:[{max_regions_num:10, max_region_count_blocks:555000}],
+    aliases:["anti+","antiplus"],
+    includesLower:true
+  },
+  "admin": {
+    title:"Admin",
+    perms:["kick — kick a player","tempban — temporary ban","kit admin — give admin kit","tempmute — temporarily mute a player","warn — warn a player"],
+    limits:[{max_regions_num:4, max_region_count_blocks:65000}],
+    includesLower:true
+  },
+  "celestial": {
+    title:"Celestial",
+    perms:["freez — freeze a player","p — particles","kit special — special kit","Note: seasonal rank (rare & unique)"],
+    limits:[{max_regions_num:8, max_region_count_blocks:75000}],
+    includesLower:true
+  }
+};
+
+/* build lookup map including aliases */
+const rankKeyMap = {};
+Object.keys(RANKS).forEach(k=>{
+  rankKeyMap[k] = k;
+  const r = RANKS[k];
+  if(r.aliases){
+    r.aliases.forEach(a => rankKeyMap[a.toLowerCase()] = k);
+  }
+});
+
+/* UI references */
+const searchInput = document.getElementById('search');
+const searchAllBtn = document.getElementById('searchAll');
+const ranksListEl = document.getElementById('ranksList');
+const rankTitleEl = document.getElementById('rankTitle');
+const rankTagEl = document.getElementById('rankTag');
+const descEl = document.getElementById('desc');
+const permsSection = document.getElementById('permsSection');
+const permsList = document.getElementById('permsList');
+const includesBox = document.getElementById('includesBox');
+const limitsSection = document.getElementById('limitsSection');
+const limitsList = document.getElementById('limitsList');
+
+let showingAll = false;
+let lastFilter = '';
+
+/* Helper: populate ranks list based on filter q (q empty -> show all) */
+function populateList(q){
+  ranksListEl.innerHTML = '';
+  q = (q||'').trim().toLowerCase();
+  const entries = Object.keys(RANKS).sort((a,b)=> RANKS[a].title.localeCompare(RANKS[b].title));
+  entries.forEach(key=>{
+    const r = RANKS[key];
+    const title = r.title || key;
+    const match = !q || title.toLowerCase().includes(q) || (r.aliases && r.aliases.some(a=>a.toLowerCase().includes(q)));
+    if(!match) return;
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.className = 'rankBtn';
+    btn.type = 'button';
+    btn.innerHTML = `<span style="font-weight:900">${title}</span>`;
+    const badge = document.createElement('span');
+    badge.className = 'badge';
+    const l = r.limits && r.limits[0];
+    badge.textContent = l ? `regions ${l.max_regions_num}` : 'view';
+    btn.appendChild(badge);
+    btn.addEventListener('click', ()=> selectRank(key, btn));
+    li.appendChild(btn);
+    ranksListEl.appendChild(li);
+  });
+  // if nothing found, show message
+  if(ranksListEl.children.length === 0){
+    ranksListEl.innerHTML = '<div style="padding:12px;color:var(--muted)">No ranks match your search.</div>';
+  }
+}
+
+/* select rank -> fill details */
+function selectRank(key, btnEl){
+  // remove active
+  [...ranksListEl.querySelectorAll('.rankBtn')].forEach(b=>b.classList.remove('active'));
+  btnEl && btnEl.classList.add('active');
+  const r = RANKS[key];
+  rankTitleEl.textContent = r.title;
+  rankTagEl.textContent = key.toUpperCase();
+  descEl.textContent = r.title + ' permissions and limits.';
+  // perms
+  if(r.perms && r.perms.length){
+    permsSection.style.display = 'block';
+    permsList.innerHTML = '';
+    r.perms.forEach(p=>{
+      const li = document.createElement('li');
+      li.className = 'permItem';
+      li.textContent = p;
+      permsList.appendChild(li);
+    });
+  } else {
+    permsSection.style.display = 'none';
+  }
+  // includesLower box
+  if(r.includesLower){
+    includesBox.style.display = 'block';
+    includesBox.textContent = 'Includes permissions of lower ranks';
+  } else {
+    includesBox.style.display = 'none';
+  }
+  // limits
+  if(r.limits && r.limits.length){
+    limitsSection.style.display = 'block';
+    limitsList.innerHTML = '';
+    r.limits.forEach((lim,idx)=>{
+      const node = document.createElement('div');
+      node.className = 'limits';
+      node.innerHTML = `<div style="font-weight:800">${r.limits.length>1 ? 'Variant '+(idx+1) : 'Limits'}</div>
+        <div>Max regions: <strong>${lim.max_regions_num}</strong></div>
+        <div>Max region block count: <strong>${lim.max_region_count_blocks.toLocaleString()}</strong></div>`;
+      limitsList.appendChild(node);
+    });
+  } else {
+    limitsSection.style.display = 'none';
+  }
+}
+
+/* When search gets focus -> show entire list */
+searchInput.addEventListener('focus', ()=>{
+  showingAll = true;
+  populateList('');
+});
+
+/* Show all button */
+searchAllBtn.addEventListener('click', ()=>{
+  showingAll = true;
+  searchInput.focus();
+  searchInput.value = '';
+  populateList('');
+});
+
+/* live filter while typing */
+searchInput.addEventListener('input', (e)=>{
+  const q = e.target.value.trim();
+  lastFilter = q;
+  // if empty and not focused, don't auto-show; but we always populate while focused
+  if(!showingAll && q === '') {
+    ranksListEl.innerHTML = '<div style="padding:12px;color:var(--muted)">Click the search box or "Show all" to reveal ranks.</div>';
+    return;
+  }
+  populateList(q);
+});
+
+/* Enter key: if user typed a rank name attempt to select it */
+searchInput.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){
+    const v = searchInput.value.trim().toLowerCase();
+    if(!v) return;
+    // try to find exact match by title or alias
+    let foundKey = null;
+    Object.keys(RANKS).forEach(k=>{
+      const r = RANKS[k];
+      if(r.title.toLowerCase() === v) foundKey = k;
+      if(r.aliases && r.aliases.map(a=>a.toLowerCase()).includes(v)) foundKey = k;
+    });
+    if(foundKey){
+      // ensure list populated so we can mark active
+      populateList(foundKey);
+      const btn = [...document.querySelectorAll('.rankBtn')].find(b => b.firstChild.textContent.toLowerCase() === RANKS[foundKey].title.toLowerCase());
+      selectRank(foundKey, btn);
+      btn && btn.scrollIntoView({behavior:'smooth', block:'center'});
+    } else {
+      // fallback: filter by substring
+      populateList(v);
+    }
+  }
+});
+
+/* initial state: show hint */
+ranksListEl.innerHTML = '<div style="padding:12px;color:var(--muted)">Click the search box or "Show all" to reveal ranks.</div>';
+
+// expose for debugging
+window.__populateList = populateList;
+window.__selectRank = (k)=> {
+  if(RANKS[k]) {
+    populateList('');
+    const btn = [...document.querySelectorAll('.rankBtn')].find(b => b.firstChild.textContent.toLowerCase() === RANKS[k].title.toLowerCase());
+    selectRank(k, btn);
+  } else console.warn('rank not found', k);
+};
+</script>
 </body>
-</html>
+  </html>
