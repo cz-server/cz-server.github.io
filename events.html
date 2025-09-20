@@ -1,54 +1,260 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>CustomZone — Events</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
-  body{margin:0;background:#000;color:#fff;font-family:Roboto, sans-serif;padding:30px}
-  .wrap{max-width:920px;margin:0 auto}
-  h1{font-family:'Press Start 2P';color:#ffb347;text-align:center}
-  .card{background:rgba(255,255,255,0.02);padding:18px;border-radius:12px;margin:14px 0;border:1px solid rgba(255,255,255,0.02);text-align:center}
-  .time{font-size:36px;font-weight:700;margin-top:8px;color:#ffd27a}
-  .note{color:#cfcfcf;margin-top:8px}
-  a.back{color:#ffd27a;text-decoration:underline;display:inline-block;margin-top:12px}
+  :root{
+    --bg:#020617;
+    --card-bg: rgba(22,22,22,0.95);
+    --accentA:#ff005d; --accentB:#4b3bff;
+    --muted: #cfdfee;
+  }
+  html,body{height:100%;margin:0;background:var(--bg);color:#fff;font-family:Roboto,system-ui,Arial}
+  .wrap{max-width:980px;margin:18px auto;padding:18px}
+
+  /* logo RGB same style */
+  .logo{
+    font-family: 'Press Start 2P', cursive;
+    font-size:48px;
+    background: linear-gradient(90deg,var(--accentA),#ff7a00,#ffd700,#44ff00,#00d4ff,var(--accentB),#ff2ee8);
+    background-size:400% 100%;
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    animation: rainbowShift 6s linear infinite;
+    margin: 6px 0 16px 0;
+    text-align:left;
+  }
+  @keyframes rainbowShift { 0%{background-position:0%} 50%{background-position:100%} 100%{background-position:0%} }
+
+  /* Page heading */
+  .page-title{font-family:'Press Start 2P'; font-size:36px; margin:8px 0 16px 0; color:var(--muted)}
+  /* card */
+  .card{background:var(--card-bg);border-radius:14px;padding:22px;box-shadow:0 12px 30px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.02);}
+  .center{display:flex;flex-direction:column;align-items:center;gap:10px}
+
+  /* countdown */
+  .countdown{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+  .countdown .unit{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:12px 16px;border-radius:10px;min-width:100px;text-align:center;font-weight:700}
+  .countdown .val{font-size:22px;color:#fff}
+  .countdown .label{font-size:12px;color:#cfdfee;margin-top:6px}
+
+  .infoRow{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:12px}
+  .infoBox{background:rgba(0,0,0,0.25);padding:10px 14px;border-radius:10px;color:var(--muted);min-width:220px;text-align:center}
+
+  .rewards{margin-top:16px}
+  .rewards ul{list-style: none;padding-left:0}
+  .rewards li{background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;margin-bottom:8px;color:#fff;font-weight:700}
+
+  footer{margin-top:28px;text-align:center;color:#9fb4d9;font-size:13px}
+
+  @media(max-width:720px){
+    .logo{font-size:34px}
+    .page-title{font-size:28px}
+    .countdown .unit{min-width:80px;padding:10px}
+  }
 </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>CUSTOMZONE EVENTS</h1>
+    <div class="logo">CustomZone</div>
 
-    <div class="card">
-      <div style="font-weight:700">Next event:</div>
-      <div style="font-size:18px;margin-top:6px">31 October 2025 — 18:00 (Moldova local time)</div>
-      <div class="note">If you are in a different timezone, your browser will convert the time to your local time.</div>
+    <div class="page-title" style="color:var(--muted)">Events</div>
 
-      <div style="margin-top:16px;font-size:14px;color:#ddd">Time remaining:</div>
-      <div id="countdown" class="time">Loading...</div>
+    <div class="card center" id="eventCard" aria-live="polite">
+      <h3 style="margin:0">Upcoming Event</h3>
+      <div style="color:#cfe6ff;font-weight:700;margin-top:4px">Halloween — Special event</div>
 
-      <div style="margin-top:12px;color:#bfbfbf">Event starts at local server IP: <strong>138.201.48.55:19457</strong></div>
+      <div style="margin-top:10px" id="countdownArea" class="countdown" aria-hidden="false">
+        <div class="unit"><div class="val" id="days">--</div><div class="label">Days</div></div>
+        <div class="unit"><div class="val" id="hours">--</div><div class="label">Hours</div></div>
+        <div class="unit"><div class="val" id="minutes">--</div><div class="label">Minutes</div></div>
+        <div class="unit"><div class="val" id="seconds">--</div><div class="label">Seconds</div></div>
+      </div>
+
+      <div class="infoRow" role="status">
+        <div class="infoBox" id="userNow">Your time: --</div>
+        <div class="infoBox" id="eventLocal">Event (Moldova time): --</div>
+        <div class="infoBox" id="eventInYourTZ">Event in your timezone: --</div>
+      </div>
+
+      <div style="margin-top:12px;color:#a8cfff;font-size:14px">
+        Event date: <strong id="eventDate">22 November</strong> — Time (Moldova): <strong id="eventTime">16:00</strong>
+      </div>
+
+      <div class="rewards" style="width:100%;max-width:640px">
+        <h4 style="margin-bottom:8px">Rewards</h4>
+        <ul>
+          <li>hiden</li>
+          <li>hiden</li>
+          <li>hiden</li>
+          <li>hiden</li>
+          <li>hiden</li>
+        </ul>
+      </div>
     </div>
 
-    <a class="back" href="index.html">← Back to home</a>
+    <footer>Auto-detected timezone and localized event time shown for each visitor.</footer>
   </div>
 
 <script>
-  // EVENT TIME: 2025-10-31 18:00 (Moldova time assumed UTC+3)
-  // NOTE: We use a fixed offset +03:00 to reflect Moldova summer time; browser will show user's local converted time.
-  const eventTime = new Date('2025-10-31T18:00:00+03:00').getTime();
+/*
+  Events page script:
+  - Countdown to 22 November at 16:00 Europe/Chisinau
+  - If date this year passed -> use next year
+  - Detect user's timezone & locale and display:
+      * user's current local time
+      * event time in Moldova (Europe/Chisinau)
+      * event time converted to user's timezone
+  Implementation detail:
+  - We compute the UTC instant that corresponds to the local Moldova event time using Intl trick (getOffset)
+*/
 
-  function updateCountdown(){
-    const now = Date.now();
-    let diff = eventTime - now;
-    if(diff <= 0){ document.getElementById('countdown').textContent = "Event is live!"; return; }
-    const d = Math.floor(diff / (1000*60*60*24)); diff -= d*(1000*60*60*24);
-    const h = Math.floor(diff / (1000*60*60)); diff -= h*(1000*60*60);
-    const m = Math.floor(diff / (1000*60)); diff -= m*(1000*60);
-    const s = Math.floor(diff / 1000);
-    document.getElementById('countdown').textContent = `${d}d ${h}h ${m}m ${s}s`;
+function pad(n){ return n.toString().padStart(2,'0'); }
+
+// parse target event date (day=22, month=11, hour=16:00) in Europe/Chisinau
+const EVENT_DAY = 22;
+const EVENT_MONTH = 11; // November
+const EVENT_HOUR = 16;
+const EVENT_MINUTE = 0;
+const EVENT_TZ = 'Europe/Chisinau';
+
+function getPartsForTZ(date, timeZone){
+  // returns object {year, month, day, hour, minute, second} representing date in that tz for the same instant
+  const dtf = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    hour12: false,
+    year:'numeric', month:'2-digit', day:'2-digit',
+    hour:'2-digit', minute:'2-digit', second:'2-digit'
+  });
+  const parts = dtf.formatToParts(date);
+  const obj = {};
+  for(const p of parts){
+    if(p.type && p.type !== 'literal') obj[p.type] = p.value;
   }
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
+  return {
+    year: Number(obj.year),
+    month: Number(obj.month),
+    day: Number(obj.day),
+    hour: Number(obj.hour),
+    minute: Number(obj.minute),
+    second: Number(obj.second)
+  };
+}
+
+// returns offset in minutes between UTC and timezone at given instant date
+function tzOffsetMinutes(date, timeZone){
+  // compute the epochAsIfUtc for the formatted parts
+  const p = getPartsForTZ(date, timeZone);
+  const asIfUtc = Date.UTC(p.year, p.month-1, p.day, p.hour, p.minute, p.second);
+  return (asIfUtc - date.getTime())/60000;
+}
+
+// create a Date object (UTC instant) that corresponds to the provided local Y/M/D H:M in the target timeZone
+function makeZonedDateUTC(year, month, day, hour, minute, timeZone){
+  // construct tentative UTC timestamp for the given local components
+  // We'll create a Date object that -when formatted to timeZone- shows the desired local components.
+  // Approach:
+  // 1) create a Date as if the local components were UTC: utcTs = Date.UTC(year,month-1,day,hour,minute)
+  // 2) compute offset between that utcTs and the timeZone at that instant (in minutes)
+  // 3) realUtcForLocal = utcTs - offset*60000
+  const utcTs = Date.UTC(year, month-1, day, hour, minute, 0);
+  const tentative = new Date(utcTs);
+  const offsetMin = tzOffsetMinutes(tentative, timeZone);
+  const actualUtc = utcTs - offsetMin*60000;
+  return new Date(actualUtc);
+}
+
+// compute event Date (UTC instant) for this year's Nov 22 16:00 in Moldova, or next year if passed
+function computeEventInstant(){
+  const now = new Date();
+  const yearNow = now.getUTCFullYear();
+  // Try this year
+  let event = makeZonedDateUTC(yearNow, EVENT_MONTH, EVENT_DAY, EVENT_HOUR, EVENT_MINUTE, EVENT_TZ);
+  if(event.getTime() <= now.getTime()){
+    // event passed -> use next year
+    event = makeZonedDateUTC(yearNow+1, EVENT_MONTH, EVENT_DAY, EVENT_HOUR, EVENT_MINUTE, EVENT_TZ);
+  }
+  return event;
+}
+
+const eventInstant = computeEventInstant();
+
+// helper: format Date in a timezone nicely
+function formatInTZ(date, timeZone, opts){
+  opts = opts || {year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', second: undefined, hour12:false};
+  return new Intl.DateTimeFormat(undefined, Object.assign({timeZone}, opts)).format(date);
+}
+
+// update UI
+function updateUI(){
+  const now = new Date();
+  // countdown
+  let diff = Math.max(0, eventInstant.getTime() - now.getTime());
+  const days = Math.floor(diff / (24*3600*1000)); diff -= days*24*3600*1000;
+  const hours = Math.floor(diff / (3600*1000)); diff -= hours*3600*1000;
+  const minutes = Math.floor(diff / (60*1000)); diff -= minutes*60*1000;
+  const seconds = Math.floor(diff / 1000);
+
+  document.getElementById('days').textContent = days;
+  document.getElementById('hours').textContent = pad(hours);
+  document.getElementById('minutes').textContent = pad(minutes);
+  document.getElementById('seconds').textContent = pad(seconds);
+
+  // user's current local time (best-effort using Intl)
+  const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  const userLocale = navigator.language || navigator.userLanguage || 'en-US';
+  document.getElementById('userNow').textContent = `Your local time (${userTz}): ${formatInTZ(now, userTz, {hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false, year:'numeric', month:'short', day:'2-digit'})}`;
+
+  // event time in Moldova (explicit)
+  document.getElementById('eventLocal').textContent = `Event (Moldova / ${EVENT_TZ}): ${formatInTZ(eventInstant, EVENT_TZ, {year:'numeric', month:'short', day:'2-digit', hour:'2-digit', minute:'2-digit', hour12:false})}`;
+
+  // event in user's timezone
+  document.getElementById('eventInYourTZ').textContent = `Event in your timezone: ${formatInTZ(eventInstant, userTz, {year:'numeric', month:'short', day:'2-digit', hour:'2-digit', minute:'2-digit', hour12:false})}`;
+
+  // show basic event date/time strings
+  const eventDateStr = formatInTZ(eventInstant, EVENT_TZ, {year:'numeric', month:'long', day:'numeric'});
+  const eventTimeStr = formatInTZ(eventInstant, EVENT_TZ, {hour:'2-digit', minute:'2-digit', hour12:false});
+  document.getElementById('eventDate').textContent = eventDateStr;
+  document.getElementById('eventTime').textContent = eventTimeStr;
+
+  // show detected location / locale if possible
+  // Try to infer country from navigator.language (e.g. "en-US") or show timezone if not available
+  let detected = '';
+  const lang = userLocale;
+  if(lang && lang.indexOf('-')> -1){
+    const region = lang.split('-')[1];
+    // use Intl.DisplayNames if available to expand region code
+    if (typeof Intl.DisplayNames === 'function') {
+      try {
+        const dn = new Intl.DisplayNames([userLocale], {type: 'region'});
+        detected = dn.of(region);
+      } catch(e){
+        detected = region;
+      }
+    } else {
+      detected = region;
+    }
+  } else {
+    detected = userTz;
+  }
+  // add small note in footer (already added) — optional
+  // You can also display the detected country next to user's time if you want
+
+  // If countdown reached zero show message
+  if(eventInstant.getTime() - now.getTime() <= 0){
+    // event started or passed
+    document.getElementById('countdownArea').innerHTML = '<div style="font-weight:800;color:#9ffcad">Event is live or just started!</div>';
+  }
+}
+
+// initial render and tick
+updateUI();
+const timerInterval = setInterval(updateUI, 1000);
+
+// expose eventInstant for debugging
+window.__EVENT_INSTANT = eventInstant;
 </script>
 </body>
-</html>
+                            </html>
